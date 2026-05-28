@@ -672,121 +672,47 @@
         });
     }
 
-    function compileAndTriggerPrintSystem() {
-        const submissionControl = document.getElementById('submitBtn');
-        submissionControl.disabled = true;
+   function compileAndTriggerPrintSystem() {
+    const printView = document.getElementById('print-view');
+    
+    // 1. Clear previous content
+    printView.innerHTML = ''; 
 
-        try {
-            const extractInputString = (elementID) => document.getElementById(elementID).value || "---";
-            const extractCheckboxState = (elementID) => document.getElementById(elementID).checked ? "[ X ]" : "[   ]";
-            const cleanWorkOrderHeader = extractInputString('form_wo').toUpperCase();
+    // 2. Build your table HTML (use the code you just shared)
+    let reportHTML = `
+        <div class="print-page">
+            <table class="p-table">
+                </table>
+        </div>
+    `;
 
-            let reportingHTMLPayload = `
-                <div class="print-page">
-                    <table class="p-table">
-                        <tr>
-                            <td colspan="4" rowspan="3" class="p-corporate-logo-cell">
-                                <div class="p-corp-title">EMPIRE<span> CO.</span></div>
-                                <div class="p-corp-sub">Field Engineering Survey Package</div>
-                            </td>
-                            <td class="p-label">SURVEY DATE</td>
-                            <td class="p-label">SURVEYOR</td>
-                        </tr>
-                        <tr>
-                            <td>${extractInputString('form_date')}</td>
-                            <td style="font-weight:bold;">${extractInputString('form_surveyor').toUpperCase()}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="p-label">Physical Job Site Location</td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">WORK ORDER ID / NAME</td>
-                            <td colspan="3" style="font-weight:bold; font-size:13px; color:#ff0000;">${cleanWorkOrderHeader}</td>
-                            <td colspan="2" rowspan="2" style="vertical-align:top; font-weight:bold;">${extractInputString('form_address').toUpperCase()}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" style="height:6px;"></td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Column Configuration</td>
-                            <td colspan="5">
-                                DIMENSIONS: <strong>${extractInputString('col_size')}</strong> &nbsp;|&nbsp; 
-                                QUANTITY: <strong>${extractInputString('col_qty')}</strong> &nbsp;|&nbsp; 
-                                ROUND CONFIG: <strong>${extractCheckboxState('col_round')}</strong> &nbsp;|&nbsp; 
-                                SQUARE CONFIG: <strong>${extractCheckboxState('col_square')}</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Canopy Bollards</td>
-                            <td colspan="5">
-                                HORSESHOE PROFILE: <strong>${extractCheckboxState('cb_horseshoe')}</strong> &nbsp;|&nbsp; 
-                                STRAIGHT PROFILE: <strong>${extractCheckboxState('cb_straight')}</strong> &nbsp;|&nbsp; 
-                                QUANTITY: <strong>${extractInputString('cb_qty')}</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Store Bollards</td>
-                            <td colspan="5">
-                                HORSESHOE PROFILE: <strong>${extractCheckboxState('sb_horseshoe')}</strong> &nbsp;|&nbsp; 
-                                STRAIGHT PROFILE: <strong>${extractCheckboxState('sb_straight')}</strong> &nbsp;|&nbsp; 
-                                QUANTITY: <strong>${extractInputString('sb_qty')}</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Auxiliary Bollards</td>
-                            <td colspan="5">
-                                HORSESHOE PROFILE: <strong>${extractCheckboxState('ob_horseshoe')}</strong> &nbsp;|&nbsp; 
-                                STRAIGHT PROFILE: <strong>${extractCheckboxState('ob_straight')}</strong> &nbsp;|&nbsp; 
-                                QUANTITY: <strong>${extractInputString('ob_qty')}</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Canopy Framework Dimensions</td>
-                            <td colspan="5">
-                                SPECIFIED FOOTPRINT: <strong>${extractInputString('canopy_size')}</strong> &nbsp;|&nbsp; 
-                                FASCIA PROFILE HEIGHT: <strong>${extractInputString('fascia_height')}</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Deck System Integrity</td>
-                            <td colspan="5">
-                                STRUCTURALLY SOUND: <strong>${extractCheckboxState('deck_good')}</strong> &nbsp;|&nbsp; 
-                                RESURFACING/PAINT REQ: <strong>${extractCheckboxState('deck_paint')}</strong> &nbsp;|&nbsp; 
-                                HEAVY OXIDATION/RUST: <strong>${extractCheckboxState('deck_rusted')}</strong> &nbsp;|&nbsp; 
-                                CLEANING / WASH REQ: <strong>${extractCheckboxState('deck_washed')}</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Dispenser Grid Layout</td>
-                            <td colspan="5">
-                                ISLAND COUNTS: <strong>${extractInputString('pump_islands_qty')}</strong> &nbsp;|&nbsp; 
-                                3+1 ASSY: <strong>${extractCheckboxState('pump_31')}</strong> (QTY: <strong>${extractInputString('pump_31_qty')}</strong>) &nbsp;|&nbsp; 
-                                3+0 ASSY: <strong>${extractCheckboxState('pump_30')}</strong> (QTY: <strong>${extractInputString('pump_30_qty')}</strong>)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Dispenser Variance Notes</td>
-                            <td colspan="5">${extractInputString('pump_other')}</td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">External Light Poles</td>
-                            <td colspan="5">POLE COUNT: <strong>${extractInputString('poles_qty')}</strong> &nbsp;|&nbsp; SURFACE COLOR SPEC: <strong>${extractInputString('poles_color')}</strong></td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Vent Line Enclosures</td>
-                            <td colspan="5">STACK COUNT: <strong>${extractInputString('vent_qty')}</strong> &nbsp;|&nbsp; SURFACE COLOR SPEC: <strong>${extractInputString('vent_color')}</strong></td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Under-Canopy Lighting</td>
-                            <td colspan="5">FIXTURE ACCOUNTABILITY QTY: <strong>${extractInputString('lights_qty')}</strong> &nbsp;|&nbsp; SOLID-STATE LED: <strong>${extractCheckboxState('lights_led')}</strong> &nbsp;|&nbsp; legacy non-led: <strong>${extractCheckboxState('lights_nonled')}</strong></td>
-                        </tr>
-                        <tr>
-                            <td class="p-label">Architectural Remarks</td>
-                            <td colspan="5" style="white-space:pre-wrap; font-style:italic;">${extractInputString('site_comments')}</td>
-                        </tr>
-                    </table>
-                </div>
-            `;
+    // 3. Group and Append Photos (Crucial for clean organization)
+    const grouped = siteImageBuffer.reduce((acc, img) => {
+        (acc[img.categoryLabel] = acc[img.categoryLabel] || []).push(img);
+        return acc;
+    }, {});
+
+    Object.keys(grouped).forEach(cat => {
+        reportHTML += `<div class="category-section"><h3>${cat}</h3>`;
+        grouped[cat].forEach(photo => {
+            reportHTML += `
+                <div class="p-photo-card">
+                    <img src="${photo.dataStream}" style="width:100%; max-width:400px;">
+                    <p>Note: ${photo.notesLabel}</p>
+                </div>`;
+        });
+        reportHTML += `</div>`;
+    });
+
+    // 4. Inject into the DOM
+    printView.innerHTML = reportHTML;
+
+    // 5. Trigger Print
+    window.print();
+    
+    // 6. Optional: Re-enable button after a short delay
+    setTimeout(() => { document.getElementById('submitBtn').disabled = false; }, 2000);
+}
 
             siteImageBuffer.forEach((bufferedImage, placementIndex) => {
                 reportingHTMLPayload += `
