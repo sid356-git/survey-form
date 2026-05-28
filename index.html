@@ -11,10 +11,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --empire-red: #ff0000;       
-            --empire-blue: #0f398a;      
-            --empire-dark: #000000;      
-            --bg-light: #f1f5f9;         
+            --empire-red: #ff0000;
+            --empire-blue: #0f398a;
+            --empire-dark: #000000;
+            --bg-light: #f1f5f9;
             --card-bg: #ffffff;
             --border-color: #cbd5e1;
             --text-main: #1e293b;
@@ -47,7 +47,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        /* Header Layout */
         .brand-header {
             display: flex;
             align-items: center;
@@ -57,45 +56,41 @@
             margin-bottom: 24px;
         }
 
-        .logo-svg {
-            width: 100%;
-            max-width: 160px;
-            height: auto;
-        }
+        .logo-graphic-container { flex-shrink: 0; display: flex; align-items: center; }
+        .logo-svg { width: 100%; max-width: 200px; height: auto; }
 
-        .logo-text-box {
-            display: flex;
-            flex-direction: column;
-        }
-
+        .logo-text-box { display: flex; flex-direction: column; }
         .logo-text-box h1 {
-            font-size: 1.8em;
+            font-size: 2.2em;
             font-weight: 800;
+            letter-spacing: 1.5px;
             margin: 0;
-            line-height: 1.1;
+            line-height: 0.95;
             color: var(--empire-dark);
         }
 
         .logo-subtext-pill {
             background-color: var(--empire-blue);
             color: #ffffff;
-            font-size: 0.75em;
+            font-size: 0.65em;
             font-weight: 700;
             text-transform: uppercase;
-            padding: 4px 10px;
+            letter-spacing: 1.2px;
+            padding: 3px 8px;
             border-radius: 50px;
             margin-top: 6px;
             display: inline-block;
+            text-align: center;
             width: fit-content;
         }
 
-        /* Layout & Inputs */
         .section-title {
             color: var(--empire-blue);
             font-size: 0.95em;
             font-weight: 800;
             margin: 28px 0 14px 0;
             text-transform: uppercase;
+            letter-spacing: 0.8px;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 6px;
         }
@@ -108,12 +103,6 @@
         }
 
         .input-group { display: flex; flex-direction: column; }
-        
-        /* Mobile adjustment for full-width inputs */
-        @media (max-width: 600px) {
-            .grid-row { grid-template-columns: 1fr; }
-            .input-group { grid-column: span 1 !important; }
-        }
 
         label {
             font-size: 0.75em;
@@ -121,6 +110,7 @@
             margin-bottom: 6px;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input, select, textarea {
@@ -129,7 +119,10 @@
             background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            font-size: 16px; /* Prevents iOS auto-zoom */
+            color: var(--text-main);
+            font-size: 16px; 
+            transition: border-color 0.15s ease;
+            -webkit-appearance: none;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -138,111 +131,47 @@
             box-shadow: 0 0 0 3px rgba(15, 57, 138, 0.15);
         }
 
-        /* Checkboxes */
-        .checkbox-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
+        .checkbox-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85em;
-            font-weight: 600;
-            background: #f8fafc;
-            padding: 10px 12px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            flex-grow: 1;
+            display: flex; align-items: center; gap: 6px; font-size: 0.85em; font-weight: 600;
+            background: #f8fafc; padding: 10px 12px; border-radius: 6px; cursor: pointer;
+            border: 1px solid #e2e8f0; flex-grow: 1;
         }
+        .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var(--empire-blue); -webkit-appearance: checkbox; }
+        .inline-qty { width: 55px; padding: 4px; margin-left: auto; font-size: 14px; text-align: center; border-radius: 4px; border: 1px solid var(--border-color); }
 
-        .checkbox-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin: 0;
-            accent-color: var(--empire-blue);
-        }
-
-        .inline-qty { width: 65px; text-align: center; margin-left: auto;}
-
-        /* Photo Upload & Gallery */
-        .photo-box {
-            background: #f8fafc;
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            margin: 16px 0;
-        }
-
-        .file-trigger {
-            background: var(--empire-blue);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .live-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .gallery-card {
-            background: white;
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
+        .photo-box { background: #f8fafc; border: 2px dashed var(--border-color); border-radius: 8px; padding: 24px; text-align: center; margin: 16px 0; }
+        .file-trigger { background: var(--empire-blue); color: white; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.9em; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .live-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 16px; }
+        .gallery-card { background: white; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .gallery-card img { width: 100%; height: 100px; object-fit: cover; display: block; }
         .gallery-details { padding: 6px; }
-        .tag { background: rgba(15, 57, 138, 0.08); color: var(--empire-blue); padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 0.7em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .tag { background: rgba(15, 57, 138, 0.08); color: var(--empire-blue); padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 0.7em; display: block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
         
-        /* Buttons & Alerts */
-        .btn-submit { 
-            background: var(--empire-red); color: white; padding: 16px; border: none; border-radius: 6px; font-weight: 800; font-size: 1.05em; width: 100%; margin-top: 24px; cursor: pointer; text-transform: uppercase;
-        }
+        .btn-submit { background: var(--empire-red); color: white; padding: 16px; border: none; border-radius: 6px; font-weight: 800; font-size: 1.05em; width: 100%; margin-top: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; box-shadow: 0 4px 6px rgba(255, 0, 0, 0.15); }
         .btn-delete { background: #fff5f5; color: var(--empire-red); padding: 5px; font-size: 0.75em; font-weight: 700; border-radius: 4px; border: 1px solid #fed7d7; width: 100%; margin-top: 6px; cursor: pointer; }
-        
+
         #status-alert { display: none; padding: 12px; border-radius: 6px; margin-bottom: 16px; font-weight: 700; font-size: 0.85em; text-align: center; }
 
         /* ==========================================================================
-           PRINT ENGINE (Hides Web Form, Shows Professional PDF Report)
+           PRINT ENGINE (Clean PDF Output)
            ========================================================================== */
         @media print {
-            /* 1. Hide the Web App */
             body > *:not(#print-view) { display: none !important; }
-            
-            /* 2. Reveal Print Container */
-            #print-view { display: block !important; width: 100%; color: black; font-family: Arial, sans-serif; }
-            
-            /* 3. Table Formatting */
-            .p-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; border: 2px solid #000; }
-            .p-table td { border: 1px solid #000; padding: 8px; font-size: 12px; vertical-align: top; }
+            #print-view { display: block !important; width: 100%; color: black; background: white; }
+            .p-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; border: 2px solid #000; font-family: Arial, sans-serif; }
+            .p-table td { border: 1px solid #000; padding: 8px; font-size: 11px; vertical-align: top; }
             .p-label { background: #f1f5f9 !important; font-weight: bold; width: 25%; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
-            /* Header inside Print */
             .p-header-cell { background: #000 !important; color: #fff !important; padding: 15px !important; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .p-header-cell h2 { margin: 0; font-family: 'Arial Black', sans-serif; letter-spacing: 1px; }
             .p-header-cell span { color: red; }
-            
-            /* 4. Photo Pagination (Forces New Page for each Category) */
-            .category-section { page-break-before: always; padding-top: 15px; }
-            .category-title { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 15px; font-size: 16px; font-weight: bold; text-transform: uppercase;}
-            .photo-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; }
+            .category-section { page-break-before: always; padding-top: 15px; font-family: Arial, sans-serif; }
+            .category-title { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 15px; font-size: 14px; font-weight: bold; text-transform: uppercase; }
+            .photo-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; }
             .p-photo-card { width: 48%; page-break-inside: avoid; margin-bottom: 15px; }
-            .p-photo-card img { width: 100%; max-height: 400px; object-fit: contain; border: 1px solid #000; }
-            .p-photo-card p { font-size: 11px; font-weight: bold; margin-top: 5px; }
+            .p-photo-card img { width: 100%; max-height: 350px; object-fit: contain; border: 1px solid #000; }
+            .p-photo-card p { font-size: 10px; font-weight: bold; margin-top: 5px; }
         }
     </style>
 </head>
@@ -253,7 +182,7 @@
         <div class="brand-header">
             <img src="empire - logo.png" alt="Empire Logo" class="logo-svg" onerror="this.style.display='none'">
             <div class="logo-text-box">
-                <h1>Empire Canopy Sign &amp; Construction</h1>
+                <h1 style="font-size: 1.8rem;">Empire Canopy Sign & Construction</h1>
                 <div class="logo-subtext-pill">Field Survey Form</div>
             </div>
         </div>
@@ -312,7 +241,7 @@
             </div>
             <div class="input-group">
                 <label>Canopy Bollards Quantity</label>
-                <input type="number" id="cb_qty" class="bollard-field" placeholder="Count" inputmode="numeric">
+                <input type="number" id="cb_qty" placeholder="Count" inputmode="numeric">
             </div>
         </div>
 
@@ -326,7 +255,7 @@
             </div>
             <div class="input-group">
                 <label>Store Bollards Quantity</label>
-                <input type="number" id="sb_qty" class="bollard-field" placeholder="Count" inputmode="numeric">
+                <input type="number" id="sb_qty" placeholder="Count" inputmode="numeric">
             </div>
         </div>
 
@@ -340,15 +269,7 @@
             </div>
             <div class="input-group">
                 <label>Other Bollards Quantity</label>
-                <input type="number" id="ob_qty" class="bollard-field" placeholder="Count" inputmode="numeric">
-            </div>
-        </div>
-
-        <div class="grid-row">
-            <div class="input-group" style="grid-column: span 3 / span 3;">
-                <div style="background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px dashed var(--empire-blue); font-size: 0.85em; font-weight: bold; color: var(--empire-blue); text-align: center;">
-                    📊 Total Bollard Covers Required = <span id="total_bollards_badge">0</span>
-                </div>
+                <input type="number" id="ob_qty" placeholder="Count" inputmode="numeric">
             </div>
         </div>
 
@@ -383,17 +304,18 @@
             <div class="input-group" style="grid-column: span 2 / span 2;">
                 <label>Dispenser Product Configurations</label>
                 <div class="checkbox-row">
-                    <span class="checkbox-item" style="flex-wrap: wrap;">
+                    <span class="checkbox-item">
                         <input type="checkbox" id="pump_31"> 3+1 Blended
                         <input type="number" id="pump_31_qty" class="inline-qty" placeholder="Qty" inputmode="numeric">
                     </span>
-                    <span class="checkbox-item" style="flex-wrap: wrap;">
+                    <span class="checkbox-item">
                         <input type="checkbox" id="pump_30"> 3+0 Standard
                         <input type="number" id="pump_30_qty" class="inline-qty" placeholder="Qty" inputmode="numeric">
                     </span>
                 </div>
             </div>
         </div>
+        
         <div class="grid-row">
             <div class="input-group" style="grid-column: span 3 / span 3;">
                 <label>Alternative Dispenser Profiles / Engineering Notes</label>
@@ -411,6 +333,7 @@
                 <input type="text" id="poles_color" placeholder="e.g. Bronze / Black">
             </div>
         </div>
+        
         <div class="grid-row">
             <div class="input-group">
                 <label>Vent Stacks / Pipes Qty</label>
@@ -437,4 +360,271 @@
         </div>
 
         <div class="grid-row">
-            <div class="input-group" style="grid-
+            <div class="input-group" style="grid-column: span 3 / span 3;">
+                <label>Field Observations & Structural Comments</label>
+                <textarea id="site_comments" rows="3" placeholder="Log any distinct architectural, clearance or structural notes..."></textarea>
+            </div>
+        </div>
+
+        <div class="section-title">Required Field Photo Ingestion</div>
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Target Placement Label</label>
+                <select id="photoCategory">
+                    <option value="All Four Sides of Canopy">All Four Sides of Canopy</option>
+                    <option value="Both Sides of All Pumps">Both Sides of All Pumps</option>
+                    <option value="All Four Sides of Building/Car Wash">All Four Sides of Building/Car Wash</option>
+                    <option value="Both Sides of MID">Both Sides of MID</option>
+                    <option value="Canopy Deck From Under Canopy">Canopy Deck From Under Canopy</option>
+                    <option value="A Few Overall Site Photos">A Few Overall Site Photos</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Orientation Direction / Elevation Note</label>
+                <input type="text" id="photoNotes" placeholder="e.g. Looking North-East">
+            </div>
+        </div>
+
+        <div class="photo-box">
+            <label class="file-trigger">
+                <span>📸 Camera Capture / File Asset</span>
+                <input type="file" id="fileSelector" accept="image/*" multiple style="display:none;" onchange="optimizeAndBufferImages(event)">
+            </label>
+        </div>
+
+        <div class="live-gallery" id="previewGallery"></div>
+
+        <button type="button" id="submitBtn" class="btn-submit" onclick="compileAndTriggerPrintSystem()">
+            Compile & Generate Survey Package
+        </button>
+    </div>
+</div>
+
+<div id="print-view" style="display:none;"></div>
+
+<script>
+    document.getElementById('form_date').valueAsDate = new Date();
+    let siteImageBuffer = [];
+
+    function postFeedbackMessage(text, nature) {
+        const component = document.getElementById('status-alert');
+        component.innerText = text;
+        component.style.display = 'block';
+        if (nature === 'success') {
+            component.style.background = '#f0fdf4'; component.style.color = '#166534'; component.style.border = '1px solid #bbf7d0';
+        } else if (nature === 'process') {
+            component.style.background = '#eff6ff'; component.style.color = '#1e40af'; component.style.border = '1px solid #bfdbfe';
+        } else {
+            component.style.background = '#fef2f2'; component.style.color = '#991b1b'; component.style.border = '1px solid #fecaca';
+        }
+    }
+
+    function optimizeAndBufferImages(e) {
+        const assets = e.target.files;
+        if (!assets.length) return;
+
+        postFeedbackMessage("Processing and stabilizing image quality strings...", "process");
+
+        const structuralCategory = document.getElementById('photoCategory').value;
+        const directionalNotes = document.getElementById('photoNotes').value || "Survey field record.";
+        let completePipelineTracker = 0;
+
+        for (let idx = 0; idx < assets.length; idx++) {
+            const fileRef = assets[idx];
+            const pipelineReader = new FileReader();
+            
+            pipelineReader.readAsDataURL(fileRef);
+            pipelineReader.onload = function(uploadEvent) {
+                const targetImageElement = new Image();
+                targetImageElement.src = uploadEvent.target.result;
+                
+                targetImageElement.onload = function() {
+                    const canvasMatrix = document.createElement('canvas');
+                    const dimensionalBoundary = 1000;
+                    let structuralWidth = targetImageElement.width;
+                    let structuralHeight = targetImageElement.height;
+
+                    if (structuralWidth > structuralHeight) {
+                        if (structuralWidth > dimensionalBoundary) { 
+                            structuralHeight = Math.round((structuralHeight * dimensionalBoundary) / structuralWidth); 
+                            structuralWidth = dimensionalBoundary; 
+                        }
+                    } else {
+                        if (structuralHeight > dimensionalBoundary) { 
+                            structuralWidth = Math.round((structuralWidth * dimensionalBoundary) / structuralHeight); 
+                            structuralHeight = dimensionalBoundary; 
+                        }
+                    }
+
+                    canvasMatrix.width = structuralWidth; 
+                    canvasMatrix.height = structuralHeight;
+                    const context2D = canvasMatrix.getContext('2d');
+                    context2D.drawImage(targetImageElement, 0, 0, structuralWidth, structuralHeight);
+                    
+                    const optimizedBase64Stream = canvasMatrix.toDataURL('image/jpeg', 0.78);
+
+                    siteImageBuffer.push({
+                        idKey: Date.now() + Math.random().toString(36).substr(2, 5),
+                        categoryLabel: structuralCategory,
+                        notesLabel: directionalNotes,
+                        dataStream: optimizedBase64Stream
+                    });
+
+                    completePipelineTracker++;
+                    if (completePipelineTracker === assets.length) {
+                        postFeedbackMessage(`Successfully added ${assets.length} images to packet.`, "success");
+                        refreshVisualGallery();
+                        document.getElementById('photoNotes').value = "";
+                        document.getElementById('fileSelector').value = "";
+                        setTimeout(() => { document.getElementById('status-alert').style.display = 'none'; }, 2500);
+                    }
+                };
+            };
+        }
+    }
+
+    function removeTargetAsset(targetUID) {
+        siteImageBuffer = siteImageBuffer.filter(element => element.idKey !== targetUID);
+        refreshVisualGallery();
+    }
+
+    function refreshVisualGallery() {
+        const domTarget = document.getElementById('previewGallery');
+        domTarget.innerHTML = "";
+        siteImageBuffer.forEach(assetItem => {
+            const nodeWrapper = document.createElement('div');
+            nodeWrapper.className = "gallery-card";
+            nodeWrapper.innerHTML = `
+                <img src="${assetItem.dataStream}">
+                <div class="gallery-details">
+                    <span class="tag">${assetItem.categoryLabel}</span>
+                    <button type="button" class="btn-delete" onclick="removeTargetAsset('${assetItem.idKey}')">Delete</button>
+                </div>
+            `;
+            domTarget.appendChild(nodeWrapper);
+        });
+    }
+
+    function compileAndTriggerPrintSystem() {
+        const printView = document.getElementById('print-view');
+        printView.innerHTML = ''; 
+
+        const v = (id) => document.getElementById(id) && document.getElementById(id).value ? document.getElementById(id).value : "---";
+        const c = (id) => document.getElementById(id) && document.getElementById(id).checked ? "[ X ]" : "[   ]";
+
+        let reportHTML = `
+            <table class="p-table">
+                <tr>
+                    <td colspan="4" rowspan="3" class="p-header-cell">
+                        <h2>EMPIRE<span> CO.</span></h2>
+                        <div style="font-size: 10px; letter-spacing: 2px; margin-top: 5px;">FIELD ENGINEERING SURVEY PACKAGE</div>
+                    </td>
+                    <td class="p-label">SURVEY DATE</td>
+                    <td class="p-label">SURVEYOR</td>
+                </tr>
+                <tr>
+                    <td>${v('form_date')}</td>
+                    <td style="font-weight:bold;">${v('form_surveyor').toUpperCase()}</td>
+                </tr>
+                <tr><td colspan="2" class="p-label">Physical Job Site Location</td></tr>
+                <tr>
+                    <td class="p-label">WORK ORDER ID / NAME</td>
+                    <td colspan="3" style="font-weight:bold; font-size:14px; color:red;">${v('form_wo').toUpperCase()}</td>
+                    <td colspan="2" rowspan="2" style="font-weight:bold;">${v('form_address').toUpperCase()}</td>
+                </tr>
+                <tr><td colspan="4" style="height:6px; border:none; border-right: 1px solid #000;"></td></tr>
+                
+                <tr>
+                    <td class="p-label">Column Configuration</td>
+                    <td colspan="5">
+                        DIMENSIONS: <strong>${v('col_size')}</strong> &nbsp;|&nbsp; 
+                        QUANTITY: <strong>${v('col_qty')}</strong> &nbsp;|&nbsp; 
+                        ROUND: <strong>${c('col_round')}</strong> &nbsp;|&nbsp; 
+                        SQUARE: <strong>${c('col_square')}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-label">Canopy Framework</td>
+                    <td colspan="5">
+                        FOOTPRINT: <strong>${v('canopy_size')}</strong> &nbsp;|&nbsp; 
+                        FASCIA HEIGHT: <strong>${v('fascia_height')}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-label">Bollards Configuration</td>
+                    <td colspan="5">
+                        CANOPY QTY: <strong>${v('cb_qty')}</strong> &nbsp;|&nbsp; 
+                        STORE QTY: <strong>${v('sb_qty')}</strong> &nbsp;|&nbsp; 
+                        OTHER QTY: <strong>${v('ob_qty')}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-label">Deck System Integrity</td>
+                    <td colspan="5">
+                        GOOD: <strong>${c('deck_good')}</strong> &nbsp;|&nbsp; 
+                        NEEDS PAINT: <strong>${c('deck_paint')}</strong> &nbsp;|&nbsp; 
+                        RUST: <strong>${c('deck_rusted')}</strong> &nbsp;|&nbsp; 
+                        NEEDS WASH: <strong>${c('deck_washed')}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-label">Dispenser Grid Layout</td>
+                    <td colspan="5">
+                        ISLANDS: <strong>${v('pump_islands_qty')}</strong> &nbsp;|&nbsp; 
+                        3+1 ASSY: <strong>${c('pump_31')} (QTY: ${v('pump_31_qty')})</strong> &nbsp;|&nbsp; 
+                        3+0 ASSY: <strong>${c('pump_30')} (QTY: ${v('pump_30_qty')})</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-label">Dispenser Notes</td>
+                    <td colspan="5">${v('pump_other')}</td>
+                </tr>
+                <tr>
+                    <td class="p-label">Illumination Systems</td>
+                    <td colspan="5">
+                        LIGHT POLES: <strong>${v('poles_qty')} (Color: ${v('poles_color')})</strong> &nbsp;|&nbsp; 
+                        CANOPY FIXTURES: <strong>${v('lights_qty')}</strong> &nbsp;|&nbsp; 
+                        LED: <strong>${c('lights_led')}</strong> &nbsp;|&nbsp; 
+                        HID: <strong>${c('lights_nonled')}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-label">Vent Line Systems</td>
+                    <td colspan="5">
+                        STACK COUNT: <strong>${v('vent_qty')}</strong> &nbsp;|&nbsp; 
+                        PAINT SPECIFICATION: <strong>${v('vent_color')}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-label">Field Engineering Comments</td>
+                    <td colspan="5" style="height: 60px; white-space:pre-wrap;">${v('site_comments')}</td>
+                </tr>
+            </table>
+        `;
+
+        const grouped = siteImageBuffer.reduce((acc, img) => {
+            (acc[img.categoryLabel] = acc[img.categoryLabel] || []).push(img);
+            return acc;
+        }, {});
+
+        Object.keys(grouped).forEach(cat => {
+            reportHTML += `<div class="category-section">
+                            <div class="category-title">CATEGORY: ${cat}</div>
+                            <div class="photo-grid">`;
+            
+            grouped[cat].forEach(photo => {
+                reportHTML += `
+                    <div class="p-photo-card">
+                        <img src="${photo.dataStream}">
+                        <p>Observation Note: ${photo.notesLabel}</p>
+                    </div>`;
+            });
+            reportHTML += `</div></div>`;
+        });
+
+        printView.innerHTML = reportHTML;
+        setTimeout(() => { window.print(); }, 250);
+    }
+</script>
+</body>
+</html>
