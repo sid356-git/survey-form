@@ -563,7 +563,16 @@
         <button type="button" id="submitBtn" class="btn-submit" onclick="compileAndTriggerPrintSystem()">
             Compile & Generate Survey Package
         </button>
-    </div>
+@media print {
+    /* Hide everything on the page */
+    body * { visibility: hidden; }
+    /* Show ONLY the print-view container */
+    #print-view, #print-view * { visibility: visible; }
+    #print-view { position: absolute; left: 0; top: 0; width: 100%; }
+    /* Force every category section to start on a new page */
+    .feature-category-page { page-break-before: always; }
+}
+</div>
 </div>
 
 <div id="print-view"></div>
