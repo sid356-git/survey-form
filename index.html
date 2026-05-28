@@ -3,223 +3,596 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empire Survey Form - Get 'N Go</title>
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- pdf-lib for processing PDFs -->
+    <title>Empire - Survey Form Engine</title>
+    <!-- Include pdf-lib for highly reliable, mobile-safe client-side PDF compilation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-</head>
-<body class="bg-gray-900 text-gray-100 min-h-screen p-4 sm:p-6">
-
-    <div class="max-w-3xl mx-auto bg-gray-800 rounded-xl shadow-2xl border border-gray-700 p-6">
-        <!-- Header -->
-        <div class="border-b border-gray-700 pb-4 mb-6">
-            <h1 class="text-2xl font-bold text-amber-500">EMPIRE SIGNAGE & CANOPY</h1>
-            <p class="text-gray-400 text-sm mt-1">Field Survey Tool — Get 'N Go Layout</p>
-        </div>
-
-        <!-- Form Fields -->
-        <div class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-1">Surveyor Name</label>
-                <input type="text" id="surveyor_name" placeholder="e.g., John Doe" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-amber-500">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-1">Site Address / Location</label>
-                <input type="text" id="site_address" placeholder="e.g., Dallas, TX" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-amber-500">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-1">Field Notes / Comments</label>
-                <textarea id="field_notes" rows="3" placeholder="Enter any specific site constraints or observations..." class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-amber-500"></textarea>
-            </div>
-
-            <!-- Image Upload Section -->
-            <div class="bg-gray-750 p-4 border border-dashed border-gray-600 rounded-lg text-center">
-                <label class="cursor-pointer block">
-                    <span class="bg-amber-600 hover:bg-amber-500 text-white font-semibold px-4 py-2 rounded-lg inline-block mb-2 shadow-md transition-all">
-                        📸 Capture or Select Photos
-                    </span>
-                    <input type="file" id="photo_input" accept="image/*" multiple capture="environment" class="hidden">
-                    <p class="text-xs text-gray-400">Supports live camera capture and photo library selection</p>
-                </label>
-            </div>
-
-            <!-- Visual Feedback List -->
-            <div>
-                <h3 class="text-sm font-semibold text-gray-400 mb-2">Attached Images Queue:</h3>
-                <div id="attachments_list" class="space-y-2 max-h-60 overflow-y-auto pr-2">
-                    <p id="no_photos_msg" class="text-sm text-gray-500 italic">No photos attached yet.</p>
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-            <button id="compile_btn" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-bold py-3 px-4 rounded-lg shadow-lg transition-all mt-6 flex items-center justify-center gap-2">
-                💾 Compile & Save Final PDF
-            </button>
-        </div>
-    </div>
-
-    <script>
-        // Store images globally as compressed base64 strings
-        let photoStore = [];
-
-        const photoInput = document.getElementById('photo_input');
-        const attachmentsList = document.getElementById('attachments_list');
-        const noPhotosMsg = document.getElementById('no_photos_msg');
-        const compileBtn = document.getElementById('compile_btn');
-
-        // Handle Image Selection and Mobile Compression
-        photoInput.addEventListener('change', async (e) => {
-            const files = Array.from(e.target.files);
-            if (files.length === 0) return;
-
-            if (noPhotosMsg) noPhotosMsg.remove();
-
-            for (const file of files) {
-                try {
-                    const compressedBase64 = await compressImage(file, 800, 800, 0.7);
-                    
-                    // Add to local array tracking
-                    photoStore.push(compressedBase64);
-
-                    // Add visual item to list
-                    const item = document.createElement('div');
-                    item.className = "flex items-center justify-between bg-gray-700 p-2 rounded-lg border border-gray-600 text-sm animate-fade-in";
-                    item.innerHTML = `
-                        <div class="flex items-center gap-2 truncate">
-                            <img src="${compressedBase64}" class="w-10 h-10 object-cover rounded border border-gray-500">
-                            <span class="truncate text-gray-200">${file.name || 'Captured Image'}</span>
-                        </div>
-                        <button class="text-red-400 hover:text-red-300 font-bold px-2 py-1 transition-colors" onclick="removePhoto(this, '${compressedBase64}')">Remove</button>
-                    `;
-                    attachmentsList.appendChild(item);
-                } catch (error) {
-                    alert("Error processing image: " + error.message);
-                }
-            }
-            // Clear input reset value so the same image can be re-snapped if needed
-            photoInput.value = '';
-        });
-
-        // Image compressor function to bypass mobile RAM limitations
-        function compressImage(file, maxWidth, maxHeight, quality) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > height) {
-                            if (width > maxWidth) {
-                                height = Math.round((height * maxWidth) / width);
-                                width = maxWidth;
-                            }
-                        } else {
-                            if (height > maxHeight) {
-                                width = Math.round((width * maxHeight) / height);
-                                height = maxHeight;
-                            }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        // Convert to compressed jpeg format
-                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                        resolve(dataUrl);
-                    };
-                    img.onerror = (err) => reject(err);
-                };
-                reader.onerror = (err) => reject(err);
-            });
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
         }
 
-        // Global function to handle image removal
-        window.removePhoto = function(buttonElement, targetBase64) {
-            photoStore = photoStore.filter(img => img !== targetBase64);
-            buttonElement.parentElement.remove();
-            if (photoStore.length === 0) {
-                attachmentsList.appendChild(noPhotosMsg);
-            }
-        };
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px 15px;
+        }
 
-        // Compile Form and Generate PDF (Mobile Compatible Download Method)
-        compileBtn.addEventListener('click', async () => {
-            const name = document.getElementById('surveyor_name').value || 'N/A';
-            const address = document.getElementById('site_address').value || 'N/A';
-            const notes = document.getElementById('field_notes').value || 'N/A';
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
 
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: var(--accent-blue);
+            margin-top: 0;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 1.6em;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            color: var(--accent-blue);
+            font-size: 0.95em;
+            font-weight: 700;
+            margin: 25px 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .grid-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-main);
+            box-sizing: border-box;
+            font-size: 0.9em;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-blue);
+            outline: none;
+        }
+
+        .checkbox-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 8px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9em;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .inline-qty {
+            width: 65px;
+            padding: 4px 6px;
+            margin-left: 4px;
+            display: inline-block;
+            font-size: 0.85em;
+            text-align: center;
+        }
+
+        .photo-box {
+            background: #1e293b;
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .file-trigger {
+            color: var(--accent-blue);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            display: inline-block;
+        }
+
+        .live-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .gallery-card {
+            background: var(--bg-main);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-details {
+            padding: 10px;
+            font-size: 0.8em;
+        }
+
+        .tag {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        .btn-submit { background: var(--accent-green); color: white; margin-top: 20px; }
+        .btn-submit:hover { background: #059669; }
+        
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 4px 8px;
+            font-size: 0.8em;
+            border-radius: 4px;
+            margin-top: 5px;
+            width: 100%;
+        }
+        .btn-delete:hover { background: var(--accent-red); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="card">
+        <div style="border-left: 4px solid var(--accent-blue); padding-left: 12px; margin-bottom: 20px;">
+            <h2>Empire Canopy & Signs</h2>
+            <div style="font-size: 0.85em; color: var(--text-muted)">Live Field Data Ingestor Engine</div>
+        </div>
+
+        <!-- Metadata Section -->
+        <div class="section-title">Project Header Details</div>
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Work Order #</label>
+                <input type="text" id="form_wo" placeholder="e.g. GET N GO">
+            </div>
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="form_date">
+            </div>
+            <div class="input-group">
+                <label>Surveyor</label>
+                <input type="text" id="form_surveyor" placeholder="e.g. Kiran">
+            </div>
+        </div>
+        <div class="grid-row">
+            <div class="input-group" style="grid-column: span 3;">
+                <label>Job Address</label>
+                <input type="text" id="form_address" placeholder="e.g. 3111 LONESTAR LN PINEHURST">
+            </div>
+        </div>
+
+        <!-- Site Asset Check Matrix -->
+        <div class="section-title">Site Asset Check Matrix</div>
+        
+        <!-- Columns -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Columns Size</label>
+                <input type="text" id="col_size" placeholder="SIZE">
+            </div>
+            <div class="input-group">
+                <label>Columns Qty</label>
+                <input type="text" id="col_qty" placeholder="QTY">
+            </div>
+            <div class="input-group">
+                <label>Columns Shape</label>
+                <div class="checkbox-row" style="padding-top: 12px;">
+                    <label class="checkbox-item"><input type="checkbox" id="col_round"> Round</label>
+                    <label class="checkbox-item"><input type="checkbox" id="col_square"> Square</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canopy Bollards -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Canopy Bollards</label>
+                <div class="checkbox-row" style="padding-top: 12px;">
+                    <label class="checkbox-item"><input type="checkbox" id="cb_horseshoe"> Horseshoe</label>
+                    <label class="checkbox-item"><input type="checkbox" id="cb_straight"> Straight</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Canopy Bollards Qty</label>
+                <input type="text" id="cb_qty" placeholder="QTY">
+            </div>
+        </div>
+
+        <!-- Store Bollards -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Store Bollards</label>
+                <div class="checkbox-row" style="padding-top: 12px;">
+                    <label class="checkbox-item"><input type="checkbox" id="sb_horseshoe"> Horseshoe</label>
+                    <label class="checkbox-item"><input type="checkbox" id="sb_straight"> Straight</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Store Bollards Qty</label>
+                <input type="text" id="sb_qty" placeholder="QTY">
+            </div>
+        </div>
+
+        <!-- Other Bollards -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Other Bollards</label>
+                <div class="checkbox-row" style="padding-top: 12px;">
+                    <label class="checkbox-item"><input type="checkbox" id="ob_horseshoe"> Horseshoe</label>
+                    <label class="checkbox-item"><input type="checkbox" id="ob_straight"> Straight</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Other Bollards Qty</label>
+                <input type="text" id="ob_qty" placeholder="QTY">
+            </div>
+        </div>
+
+        <!-- Canopy Size & Fascia Height -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Canopy Size</label>
+                <input type="text" id="canopy_size" placeholder="e.g. 24' x 120'">
+            </div>
+            <div class="input-group">
+                <label>Canopy Fascia Height</label>
+                <input type="text" id="fascia_height" placeholder="FASCIA HEIGHT">
+            </div>
+        </div>
+
+        <!-- Canopy Deck Condition -->
+        <div class="grid-row">
+            <div class="input-group" style="grid-column: span 3;">
+                <label>Canopy Deck Condition</label>
+                <div class="checkbox-row">
+                    <label class="checkbox-item"><input type="checkbox" id="deck_good"> Good</label>
+                    <label class="checkbox-item"><input type="checkbox" id="deck_paint"> Needs Paint</label>
+                    <label class="checkbox-item"><input type="checkbox" id="deck_rusted"> Rusted</label>
+                    <label class="checkbox-item"><input type="checkbox" id="deck_washed"> Needs Washed</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pump Islands & Pumps Config -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Pump Islands Qty</label>
+                <input type="text" id="pump_islands_qty" placeholder="QTY">
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Pumps Config</label>
+                <div class="checkbox-row" style="padding-top: 5px;">
+                    <span class="checkbox-item">
+                        <input type="checkbox" id="pump_31"> 3+1 
+                        <input type="text" id="pump_31_qty" class="inline-qty" placeholder="QTY">
+                    </span>
+                    <span class="checkbox-item" style="margin-left: 15px;">
+                        <input type="checkbox" id="pump_30"> 3+0 
+                        <input type="text" id="pump_30_qty" class="inline-qty" placeholder="QTY">
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="grid-row">
+            <div class="input-group" style="grid-column: span 3;">
+                <label>Pumps Other Config</label>
+                <input type="text" id="pump_other" placeholder="OTHER">
+            </div>
+        </div>
+
+        <!-- Light Poles -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Light Poles Qty</label>
+                <input type="text" id="poles_qty" placeholder="QTY">
+            </div>
+            <div class="input-group">
+                <label>Light Poles Color</label>
+                <input type="text" id="poles_color" placeholder="COLOR">
+            </div>
+        </div>
+
+        <!-- Vent Pipes -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Vent Pipes (How Many)</label>
+                <input type="text" id="vent_qty" placeholder="HOW MANY PIPES">
+            </div>
+            <div class="input-group">
+                <label>Vent Pipes Color</label>
+                <input type="text" id="vent_color" placeholder="COLOR">
+            </div>
+        </div>
+
+        <!-- Canopy Lights -->
+        <div class="grid-row">
+            <div class="input-group">
+                <label>Canopy Lights Qty</label>
+                <input type="text" id="lights_qty" placeholder="QTY">
+            </div>
+            <div class="input-group">
+                <label>Canopy Lights Tech</label>
+                <div class="checkbox-row" style="padding-top: 12px;">
+                    <label class="checkbox-item"><input type="checkbox" id="lights_led"> LED</label>
+                    <label class="checkbox-item"><input type="checkbox" id="lights_nonled"> Non LED</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- General Site Comments -->
+        <div class="grid-row">
+            <div class="input-group" style="grid-column: span 3;">
+                <label>General Site Comments</label>
+                <textarea id="site_comments" rows="2" placeholder="Add custom notes here..."></textarea>
+            </div>
+        </div>
+
+        <!-- Photo Section -->
+        <div class="section-title">Required Photo Execution Zone</div>
+        <div class="grid-row" style="grid-template-columns: 1fr 1fr;">
+            <div class="input-group">
+                <label>Select Photo Label Category</label>
+                <select id="photoCategory">
+                    <option value="All Four Sides of Canopy">All Four Sides of Canopy</option>
+                    <option value="Both Sides of All Pumps">Both Sides of All Pumps</option>
+                    <option value="All Four Sides of Building/Car Wash">All Four Sides of Building/Car Wash</option>
+                    <option value="Both Sides of MID">Both Sides of MID</option>
+                    <option value="Canopy Deck From Under Canopy">Canopy Deck From Under Canopy</option>
+                    <option value="A Few Overall Site Photos">A Few Overall Site Photos</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Variance Notes for this Photo</label>
+                <input type="text" id="photoNotes" placeholder="e.g. North Elevation view">
+            </div>
+        </div>
+
+        <div class="photo-box">
+            <label class="file-trigger">
+                📷 Select Site Photo to Ingest
+                <input type="file" id="fileSelector" accept="image/*" multiple onchange="handleImageUpload(event)">
+            </label>
+        </div>
+
+        <div class="live-gallery" id="previewGallery"></div>
+
+        <button type="button" id="submitBtn" class="btn btn-submit" onclick="generateCleanReportPDF()">
+            ⚙ Compile & Save Clean Survey Form Package
+        </button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('form_date').valueAsDate = new Date();
+    let photoStore = [];
+
+    // Handles compression immediately to prevent mobile crashes
+    async function handleImageUpload(event) {
+        const files = event.target.files;
+        const selectedCat = document.getElementById('photoCategory').value;
+        const enteredNotes = document.getElementById('photoNotes').value || "Field asset verification confirmation photo.";
+
+        for (let i = 0; i < files.length; i++) {
             try {
-                compileBtn.disabled = true;
-                compileBtn.innerText = "Processing PDF...";
-
-                // Create document
-                const pdfDoc = await PDFLib.PDFDocument.create();
-                let page = pdfDoc.addPage([612, 792]); // Standard Letter Size
-                const { width, height } = page.getSize();
-
-                // Draw Text Titles
-                page.drawText("EMPIRE SIGNAGE & CANOPY FIELD REPORT", { x: 50, y: height - 50, size: 20, color: PDFLib.rgb(0.8, 0.5, 0.1) });
-                page.drawText(`Surveyor: ${name}`, { x: 50, y: height - 90, size: 12 });
-                page.drawText(`Date: ${new Date().toLocaleDateString()}`, { x: 50, y: height - 110, size: 12 });
-                page.drawText(`Location: ${address}`, { x: 50, y: height - 130, size: 12 });
-                
-                page.drawText("Field Observations & Comments:", { x: 50, y: height - 170, size: 14, color: PDFLib.rgb(0.2, 0.2, 0.2) });
-                page.drawText(notes, { x: 50, y: height - 190, size: 11, maxWidth: 512, lineHeight: 14 });
-
-                // Append Photos seamlessly
-                let currentY = height - 260;
-                for (let i = 0; i < photoStore.length; i++) {
-                    const base64Data = photoStore[i].split(',')[1];
-                    const imageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
-                    const embeddedImage = await pdfDoc.embedJpg(imageBytes);
-
-                    // Check if image fits page bounds, if not roll onto a new page
-                    if (currentY - 220 < 40) {
-                        page = pdfDoc.addPage([612, 792]);
-                        currentY = 740;
-                    }
-
-                    page.drawText(`Attachment Photo #${i + 1}:`, { x: 50, y: currentY, size: 11 });
-                    page.drawImage(embeddedImage, {
-                        x: 50,
-                        y: currentY - 210,
-                        width: 280,
-                        height: 200
-                    });
-                    currentY -= 240;
-                }
-
-                // Compile binary representation
-                const pdfBytes = await pdfDoc.save();
-                const blob = new Blob([pdfBytes], { type: "application/pdf" });
-
-                // Mobile Native Safe Download Trigger
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `Empire_SurveyForm_GetNGo_${Date.now()}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                alert("Success! PDF generated and downloaded successfully.");
-
+                const compressedBase64 = await compressImage(files[i], 1000, 1000, 0.75);
+                photoStore.push({
+                    id: Date.now() + Math.random().toString(36).substr(2, 5),
+                    category: selectedCat,
+                    notes: enteredNotes,
+                    src: compressedBase64
+                });
+                renderAppPreview();
             } catch (err) {
-                alert("Generation error details: " + err.message);
-            } finally {
-                compileBtn.disabled = false;
-                compileBtn.innerText = "💾 Compile & Save Final PDF";
+                alert("Image read failure: " + err.message);
             }
+        }
+        document.getElementById('photoNotes').value = "";
+        document.getElementById('fileSelector').value = "";
+    }
+
+    // Canvas Downscaler to bypass Mobile RAM boundaries
+    function compressImage(file, maxWidth, maxHeight, quality) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
+                    } else {
+                        if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight; }
+                    }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.onerror = reject;
+            };
+            reader.onerror = reject;
         });
-    </script>
+    }
+
+    function removePhoto(targetId) {
+        photoStore = photoStore.filter(p => p.id !== targetId);
+        renderAppPreview();
+    }
+
+    function renderAppPreview() {
+        const gallery = document.getElementById('previewGallery');
+        gallery.innerHTML = "";
+        photoStore.forEach(photo => {
+            const element = document.createElement('div');
+            element.className = "gallery-card";
+            element.innerHTML = `
+                <img src="${photo.src}">
+                <div class="gallery-details">
+                    <span class="tag">${photo.category}</span>
+                    <p style="margin:2px 0 6px 0; color:var(--text-muted); line-height:1.2;">${photo.notes}</p>
+                    <button type="button" class="btn btn-delete" onclick="removePhoto('${photo.id}')">✖ Clear Photo</button>
+                </div>
+            `;
+            gallery.appendChild(element);
+        });
+    }
+
+    // Main PDF Compilation via native pdf-lib architecture
+    async function generateCleanReportPDF() {
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "Processing & Compiling Data...";
+
+        try {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            let page = pdfDoc.addPage([612, 792]);
+            const { width, height } = page.getSize();
+
+            const text = (id) => document.getElementById(id).value || '---';
+            const check = (id) => document.getElementById(id).checked ? '[X]' : '[ ]';
+
+            // Top Header Structure
+            page.drawText("EMPIRE CANOPY & SIGNS — SURVEY REPORT", { x: 40, y: height - 50, size: 16, font: await pdfDoc.embedFont('Helvetica-Bold') });
+            page.drawText(`WORK ORDER: ${text('form_wo').toUpperCase()}`, { x: 40, y: height - 75, size: 12 });
+            page.drawText(`DATE: ${text('form_date')}`, { x: 40, y: height - 95, size: 11 });
+            page.drawText(`SURVEYOR: ${text('form_surveyor').toUpperCase()}`, { x: 250, y: height - 95, size: 11 });
+            page.drawText(`ADDRESS: ${text('form_address')}`, { x: 40, y: height - 115, size: 11, maxWidth: 530 });
+
+            // Data Grid Generation Text Mapping
+            let y = height - 150;
+            const drawRow = (label, dataString) => {
+                page.drawText(`${label}:`, { x: 40, y, size: 11, font: PDFLib.StandardFonts.HelveticaBold });
+                page.drawText(dataString, { x: 160, y, size: 11 });
+                y -= 22;
+            };
+
+            drawRow("Columns", `Size: ${text('col_size')}  |  Qty: ${text('col_qty')}  |  Round: ${check('col_round')}  |  Square: ${check('col_square')}`);
+            drawRow("Canopy Bollards", `Horseshoe: ${check('cb_horseshoe')}  |  Straight: ${check('cb_straight')}  |  Qty: ${text('cb_qty')}`);
+            drawRow("Store Bollards", `Horseshoe: ${check('sb_horseshoe')}  |  Straight: ${check('sb_straight')}  |  Qty: ${text('sb_qty')}`);
+            drawRow("Other Bollards", `Horseshoe: ${check('ob_horseshoe')}  |  Straight: ${check('ob_straight')}  |  Qty: ${text('ob_qty')}`);
+            drawRow("Canopy Dimensions", `Size: ${text('canopy_size')}  |  Fascia Height: ${text('fascia_height')}`);
+            drawRow("Deck Condition", `Good: ${check('deck_good')}  |  Paint: ${check('deck_paint')}  |  Rusted: ${check('deck_rusted')}  |  Washed: ${check('deck_washed')}`);
+            drawRow("Pump Settings", `Islands Qty: ${text('pump_islands_qty')}  |  3+1: ${check('pump_31')} (Qty: ${text('pump_31_qty')})  |  3+0: ${check('pump_30')} (Qty: ${text('pump_30_qty')})`);
+            drawRow("Pumps Other", text('pump_other'));
+            drawRow("Light Poles", `Qty: ${text('poles_qty')}  |  Color: ${text('poles_color')}`);
+            drawRow("Vent Pipes", `Qty: ${text('vent_qty')}  |  Color: ${text('vent_color')}`);
+            drawRow("Canopy Lights", `Qty: ${text('lights_qty')}  |  LED: ${check('lights_led')}  |  Non-LED: ${check('lights_nonled')}`);
+            
+            y -= 10;
+            page.drawText("General Field Comments:", { x: 40, y, size: 11, font: await pdfDoc.embedFont('Helvetica-Bold') });
+            y -= 15;
+            page.drawText(text('site_comments'), { x: 40, y, size: 10, maxWidth: 530, lineHeight: 14 });
+
+            // Photo Pages Extraction Sequence
+            for (let i = 0; i < photoStore.length; i++) {
+                page = pdfDoc.addPage([612, 792]);
+                const photo = photoStore[i];
+                
+                const rawBytes = Uint8Array.from(atob(photo.split(',')[1]), c => c.charCodeAt(0));
+                const imgEmbed = await pdfDoc.embedJpg(rawBytes);
+
+                page.drawText(`FIELD IMAGE LOG — ATTACHMENT #${i + 1}`, { x: 40, y: 740, size: 12, font: await pdfDoc.embedFont('Helvetica-Bold') });
+                page.drawText(`Category: ${photo.category}`, { x: 40, y: 720, size: 11 });
+                page.drawText(`Notes: ${photo.notes}`, { x: 40, y: 700, size: 10, maxWidth: 530 });
+
+                page.drawImage(imgEmbed, { x: 40, y: 230, width: 532, height: 440 });
+            }
+
+            // Fire Mobile Native Document Pipeline Trigger
+            const finalBytes = await pdfDoc.save();
+            const blob = new Blob([finalBytes], { type: "application/pdf" });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Empire_SurveyForm_${text('form_wo').replace(/\s+/g, '_') || 'DATA'}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (err) {
+            alert("Error compiling master data layout: " + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "⚙ Compile & Save Clean Survey Form Package";
+        }
+    }
+</script>
+
 </body>
 </html>
