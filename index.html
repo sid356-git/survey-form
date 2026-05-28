@@ -62,9 +62,10 @@
             align-items: center;
         }
 
-        .logo-svg {
-            width: 100px;
-            height: 100px;
+        .logo-img {
+            width: 150px;
+            height: auto;
+            object-fit: contain;
         }
 
         .logo-text-box {
@@ -340,22 +341,7 @@
         
         <div class="brand-header">
             <div class="logo-graphic-container">
-                <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Red arch background -->
-                    <path d="M 50 80 A 75 75 0 0 1 150 80 L 135 80 A 60 60 0 0 0 65 80 Z" fill="#ff0000"/>
-                    
-                    <!-- Blue columns/pillars -->
-                    <path d="M 70 80 L 70 30 L 85 30 L 85 80 Z" fill="#0f398a"/>
-                    <path d="M 115 80 L 115 30 L 130 30 L 130 80 Z" fill="#0f398a"/>
-                    
-                    <!-- Red side elements -->
-                    <rect x="50" y="75" width="15" height="35" fill="#ff0000"/>
-                    <rect x="135" y="75" width="15" height="35" fill="#ff0000"/>
-                </svg>
-            </div>
-            <div class="logo-text-box">
-                <h1>EMPIRE</h1>
-                <div><span class="logo-subtext-pill">Canopy • Sign • Construction</span></div>
+                <img src="empire - logo.png" alt="Empire Logo" class="logo-img">
             </div>
         </div>
 
