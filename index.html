@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empire - Survey Form Engine</title>
-    <!-- Include pdf-lib for highly reliable, mobile-safe client-side PDF compilation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --bg-main: #0f172a;
@@ -201,6 +200,99 @@
             width: 100%;
         }
         .btn-delete:hover { background: var(--accent-red); color: white; }
+
+        /* ==========================================================================
+           PDF EXCEL MATRIX ALIGNMENT STYLE
+           ========================================================================== */
+        #pdf-render-target {
+            display: none;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .pdf-page {
+            padding: 30px;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 5px;
+        }
+
+        .pdf-table td {
+            border: 1px solid #000000;
+            padding: 8px 10px;
+            font-size: 11px;
+            vertical-align: middle;
+            word-wrap: break-word;
+            font-family: Arial, sans-serif;
+            color: #000000;
+        }
+
+        .pdf-title-cell {
+            font-size: 22px !important;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 1px;
+            padding: 12px !important;
+        }
+
+        .pdf-label {
+            font-weight: bold;
+            background-color: #e2e8f0;
+        }
+
+        .pdf-photo-wrapper {
+            page-break-before: always;
+            padding: 30px;
+            background: #ffffff;
+        }
+
+        .pdf-photo-header {
+            font-size: 11px;
+            color: #475569;
+            border-bottom: 1px solid #000000;
+            padding-bottom: 4px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .pdf-img-box {
+            border: 1px solid #000000;
+            padding: 10px;
+            background: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .pdf-img-box img {
+            width: 100%;
+            max-height: 430px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .pdf-img-tag {
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 8px;
+            text-transform: uppercase;
+            border-left: 3px solid #000000;
+            padding-left: 6px;
+        }
+
+        .pdf-img-notes {
+            font-size: 10px;
+            color: #334155;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -212,7 +304,6 @@
             <div style="font-size: 0.85em; color: var(--text-muted)">Live Field Data Ingestor Engine</div>
         </div>
 
-        <!-- Metadata Section -->
         <div class="section-title">Project Header Details</div>
         <div class="grid-row">
             <div class="input-group">
@@ -235,10 +326,8 @@
             </div>
         </div>
 
-        <!-- Site Asset Check Matrix -->
         <div class="section-title">Site Asset Check Matrix</div>
         
-        <!-- Columns -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Columns Size</label>
@@ -257,7 +346,6 @@
             </div>
         </div>
 
-        <!-- Canopy Bollards -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Canopy Bollards</label>
@@ -272,7 +360,6 @@
             </div>
         </div>
 
-        <!-- Store Bollards -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Store Bollards</label>
@@ -287,7 +374,6 @@
             </div>
         </div>
 
-        <!-- Other Bollards -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Other Bollards</label>
@@ -302,7 +388,6 @@
             </div>
         </div>
 
-        <!-- Canopy Size & Fascia Height -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Canopy Size</label>
@@ -314,7 +399,6 @@
             </div>
         </div>
 
-        <!-- Canopy Deck Condition -->
         <div class="grid-row">
             <div class="input-group" style="grid-column: span 3;">
                 <label>Canopy Deck Condition</label>
@@ -327,7 +411,6 @@
             </div>
         </div>
 
-        <!-- Pump Islands & Pumps Config -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Pump Islands Qty</label>
@@ -354,7 +437,6 @@
             </div>
         </div>
 
-        <!-- Light Poles -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Light Poles Qty</label>
@@ -366,7 +448,6 @@
             </div>
         </div>
 
-        <!-- Vent Pipes -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Vent Pipes (How Many)</label>
@@ -378,7 +459,6 @@
             </div>
         </div>
 
-        <!-- Canopy Lights -->
         <div class="grid-row">
             <div class="input-group">
                 <label>Canopy Lights Qty</label>
@@ -393,7 +473,6 @@
             </div>
         </div>
 
-        <!-- General Site Comments -->
         <div class="grid-row">
             <div class="input-group" style="grid-column: span 3;">
                 <label>General Site Comments</label>
@@ -401,7 +480,6 @@
             </div>
         </div>
 
-        <!-- Photo Section -->
         <div class="section-title">Required Photo Execution Zone</div>
         <div class="grid-row" style="grid-template-columns: 1fr 1fr;">
             <div class="input-group">
@@ -417,7 +495,7 @@
             </div>
             <div class="input-group">
                 <label>Variance Notes for this Photo</label>
-                <input type="text" id="photoNotes" placeholder="e.g. North Elevation view">
+                <input type="text" id="photoNotes" placeholder="Field asset verification confirmation photo.">
             </div>
         </div>
 
@@ -436,11 +514,131 @@
     </div>
 </div>
 
+<div id="pdf-render-target">
+    <div class="pdf-page">
+        <table class="pdf-table">
+            <tr>
+                <td colspan="4" rowspan="3" class="pdf-title-cell">SURVEY FORM</td>
+                <td class="pdf-label" style="width: 15%;">DATE</td>
+                <td class="pdf-label" style="width: 25%;">SURVEYOR</td>
+            </tr>
+            <tr>
+                <td id="out_date"></td>
+                <td id="out_surveyor" style="font-weight: bold;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="pdf-label">Job Address</td>
+            </tr>
+            <tr>
+                <td class="pdf-label">WORK ORDER #:</td>
+                <td colspan="3" id="out_wo" style="font-weight: bold; font-size:12px;"></td>
+                <td colspan="2" rowspan="2" id="out_address" style="vertical-align: top;"></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="height: 10px; background: #ffffff;"></td>
+            </tr>
+
+            <tr>
+                <td class="pdf-label">Columns</td>
+                <td colspan="5">
+                    SIZE: <span id="out_col_size" style="font-weight:bold; margin-right:20px;"></span>
+                    QTY: <span id="out_col_qty" style="font-weight:bold; margin-right:20px;"></span>
+                    ROUND: <span id="out_col_round" style="font-weight:bold; margin-right:20px;"></span>
+                    SQUARE: <span id="out_col_square" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Canopy Bollards</td>
+                <td colspan="5">
+                    HORSESHOE: <span id="out_cb_horse" style="font-weight:bold; margin-right:20px;"></span>
+                    STRAIGHT: <span id="out_cb_straight" style="font-weight:bold; margin-right:20px;"></span>
+                    QTY: <span id="out_cb_qty" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Store Bollards</td>
+                <td colspan="5">
+                    HORSESHOE: <span id="out_sb_horse" style="font-weight:bold; margin-right:20px;"></span>
+                    STRAIGHT: <span id="out_sb_straight" style="font-weight:bold; margin-right:20px;"></span>
+                    QTY: <span id="out_sb_qty" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Other Bollards</td>
+                <td colspan="5">
+                    HORSESHOE: <span id="out_ob_horse" style="font-weight:bold; margin-right:20px;"></span>
+                    STRAIGHT: <span id="out_ob_straight" style="font-weight:bold; margin-right:20px;"></span>
+                    QTY: <span id="out_ob_qty" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Canopy Size</td>
+                <td colspan="5" id="out_canopy_size" style="font-weight:bold;"></td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Canopy Fascia</td>
+                <td colspan="5">
+                    FASCIA HEIGHT: <span id="out_fascia_height" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Canopy Deck</td>
+                <td colspan="5">
+                    GOOD: <span id="out_deck_good" style="font-weight:bold; margin-right:15px;"></span>
+                    NEEDS PAINT: <span id="out_deck_paint" style="font-weight:bold; margin-right:15px;"></span>
+                    RUSTED: <span id="out_deck_rusted" style="font-weight:bold; margin-right:15px;"></span>
+                    NEEDS WASHED: <span id="out_deck_washed" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Pump Islands</td>
+                <td colspan="5">
+                    QTY: <span id="out_pump_islands" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Pumps</td>
+                <td colspan="5">
+                    3+1: <span id="out_pump_31" style="font-weight:bold; margin-right:5px;"></span> QTY: <span id="out_pump_31_val" style="font-weight:bold; margin-right:25px;"></span>
+                    3+0: <span id="out_pump_30" style="font-weight:bold; margin-right:5px;"></span> QTY: <span id="out_pump_30_val" style="font-weight:bold; margin-right:25px;"></span>
+                    OTHER: <span id="out_pump_other" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Light Poles</td>
+                <td colspan="5">
+                    QTY: <span id="out_poles_qty" style="font-weight:bold; margin-right:30px;"></span>
+                    COLOR: <span id="out_poles_color" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Vent Pipes</td>
+                <td colspan="5">
+                    HOW MANY PIPES: <span id="out_vent_qty" style="font-weight:bold; margin-right:30px;"></span>
+                    COLOR: <span id="out_vent_color" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Canopy Lights</td>
+                <td colspan="5">
+                    QTY: <span id="out_lights_qty" style="font-weight:bold; margin-right:25px;"></span>
+                    LED: <span id="out_lights_led" style="font-weight:bold; margin-right:25px;"></span>
+                    NON LED: <span id="out_lights_nonled" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdf-label">Comments</td>
+                <td colspan="5" id="out_comments" style="font-style: italic; white-space: pre-wrap;"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="photoInjectionContainer"></div>
+</div>
+
 <script>
     document.getElementById('form_date').valueAsDate = new Date();
     let photoStore = [];
 
-    // Handles compression immediately to prevent mobile crashes
     async function handleImageUpload(event) {
         const files = event.target.files;
         const selectedCat = document.getElementById('photoCategory').value;
@@ -448,7 +646,7 @@
 
         for (let i = 0; i < files.length; i++) {
             try {
-                const compressedBase64 = await compressImage(files[i], 1000, 1000, 0.75);
+                const compressedBase64 = await compressImage(files[i], 900, 900, 0.7);
                 photoStore.push({
                     id: Date.now() + Math.random().toString(36).substr(2, 5),
                     category: selectedCat,
@@ -457,14 +655,13 @@
                 });
                 renderAppPreview();
             } catch (err) {
-                alert("Image read failure: " + err.message);
+                alert("File error: " + err.message);
             }
         }
         document.getElementById('photoNotes').value = "";
         document.getElementById('fileSelector').value = "";
     }
 
-    // Canvas Downscaler to bypass Mobile RAM boundaries
     function compressImage(file, maxWidth, maxHeight, quality) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -474,8 +671,7 @@
                 img.src = e.target.result;
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
+                    let width = img.width; let height = img.height;
                     if (width > height) {
                         if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
                     } else {
@@ -515,82 +711,98 @@
         });
     }
 
-    // Main PDF Compilation via native pdf-lib architecture
-    async function generateCleanReportPDF() {
+    function generateCleanReportPDF() {
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
-        btn.innerText = "Processing & Compiling Data...";
+        btn.innerText = "Compiling PDF document...";
 
-        try {
-            const pdfDoc = await PDFLib.PDFDocument.create();
-            let page = pdfDoc.addPage([612, 792]);
-            const { width, height } = page.getSize();
+        const jobTitle = document.getElementById('form_wo').value || "SURVEY_FORM_DATA";
 
-            const text = (id) => document.getElementById(id).value || '---';
-            const check = (id) => document.getElementById(id).checked ? '[X]' : '[ ]';
+        // Inject Data Fields
+        document.getElementById('out_wo').innerText = jobTitle.toUpperCase();
+        document.getElementById('out_date').innerText = document.getElementById('form_date').value;
+        document.getElementById('out_surveyor').innerText = document.getElementById('form_surveyor').value.toUpperCase() || "N/A";
+        document.getElementById('out_address').innerText = document.getElementById('form_address').value || "N/A";
+        document.getElementById('out_comments').innerText = document.getElementById('site_comments').value || "No generic deviations annotated on digital master layout.";
 
-            // Top Header Structure
-            page.drawText("EMPIRE CANOPY & SIGNS — SURVEY REPORT", { x: 40, y: height - 50, size: 16, font: await pdfDoc.embedFont('Helvetica-Bold') });
-            page.drawText(`WORK ORDER: ${text('form_wo').toUpperCase()}`, { x: 40, y: height - 75, size: 12 });
-            page.drawText(`DATE: ${text('form_date')}`, { x: 40, y: height - 95, size: 11 });
-            page.drawText(`SURVEYOR: ${text('form_surveyor').toUpperCase()}`, { x: 250, y: height - 95, size: 11 });
-            page.drawText(`ADDRESS: ${text('form_address')}`, { x: 40, y: height - 115, size: 11, maxWidth: 530 });
+        const checkMark = (id) => document.getElementById(id).checked ? "[ X ]" : "[   ]";
+        const valueMark = (id) => document.getElementById(id).value || "---";
 
-            // Data Grid Generation Text Mapping
-            let y = height - 150;
-            const drawRow = (label, dataString) => {
-                page.drawText(`${label}:`, { x: 40, y, size: 11, font: PDFLib.StandardFonts.HelveticaBold });
-                page.drawText(dataString, { x: 160, y, size: 11 });
-                y -= 22;
-            };
+        document.getElementById('out_col_size').innerText = valueMark('col_size');
+        document.getElementById('out_col_qty').innerText = valueMark('col_qty');
+        document.getElementById('out_col_round').innerText = checkMark('col_round');
+        document.getElementById('out_col_square').innerText = checkMark('col_square');
+        document.getElementById('out_cb_horse').innerText = checkMark('cb_horseshoe');
+        document.getElementById('out_cb_straight').innerText = checkMark('cb_straight');
+        document.getElementById('out_cb_qty').innerText = valueMark('cb_qty');
+        document.getElementById('out_sb_horse').innerText = checkMark('sb_horseshoe');
+        document.getElementById('out_sb_straight').innerText = checkMark('sb_straight');
+        document.getElementById('out_sb_qty').innerText = valueMark('sb_qty');
+        document.getElementById('out_ob_horse').innerText = checkMark('ob_horseshoe');
+        document.getElementById('out_ob_straight').innerText = checkMark('ob_straight');
+        document.getElementById('out_ob_qty').innerText = valueMark('ob_qty');
+        document.getElementById('out_canopy_size').innerText = valueMark('canopy_size');
+        document.getElementById('out_fascia_height').innerText = valueMark('fascia_height');
+        document.getElementById('out_deck_good').innerText = checkMark('deck_good');
+        document.getElementById('out_deck_paint').innerText = checkMark('deck_paint');
+        document.getElementById('out_deck_rusted').innerText = checkMark('deck_rusted');
+        document.getElementById('out_deck_washed').innerText = checkMark('deck_washed');
+        document.getElementById('out_pump_islands').innerText = valueMark('pump_islands_qty');
+        document.getElementById('out_pump_31').innerText = checkMark('pump_31');
+        document.getElementById('out_pump_31_val').innerText = valueMark('pump_31_qty');
+        document.getElementById('out_pump_30').innerText = checkMark('pump_30');
+        document.getElementById('out_pump_30_val').innerText = valueMark('pump_30_qty');
+        document.getElementById('out_pump_other').innerText = valueMark('pump_other');
+        document.getElementById('out_poles_qty').innerText = valueMark('poles_qty');
+        document.getElementById('out_poles_color').innerText = valueMark('poles_color');
+        document.getElementById('out_vent_qty').innerText = valueMark('vent_qty');
+        document.getElementById('out_vent_color').innerText = valueMark('vent_color');
+        document.getElementById('out_lights_qty').innerText = valueMark('lights_qty');
+        document.getElementById('out_lights_led').innerText = checkMark('lights_led');
+        document.getElementById('out_lights_nonled').innerText = checkMark('lights_nonled');
 
-            drawRow("Columns", `Size: ${text('col_size')}  |  Qty: ${text('col_qty')}  |  Round: ${check('col_round')}  |  Square: ${check('col_square')}`);
-            drawRow("Canopy Bollards", `Horseshoe: ${check('cb_horseshoe')}  |  Straight: ${check('cb_straight')}  |  Qty: ${text('cb_qty')}`);
-            drawRow("Store Bollards", `Horseshoe: ${check('sb_horseshoe')}  |  Straight: ${check('sb_straight')}  |  Qty: ${text('sb_qty')}`);
-            drawRow("Other Bollards", `Horseshoe: ${check('ob_horseshoe')}  |  Straight: ${check('ob_straight')}  |  Qty: ${text('ob_qty')}`);
-            drawRow("Canopy Dimensions", `Size: ${text('canopy_size')}  |  Fascia Height: ${text('fascia_height')}`);
-            drawRow("Deck Condition", `Good: ${check('deck_good')}  |  Paint: ${check('deck_paint')}  |  Rusted: ${check('deck_rusted')}  |  Washed: ${check('deck_washed')}`);
-            drawRow("Pump Settings", `Islands Qty: ${text('pump_islands_qty')}  |  3+1: ${check('pump_31')} (Qty: ${text('pump_31_qty')})  |  3+0: ${check('pump_30')} (Qty: ${text('pump_30_qty')})`);
-            drawRow("Pumps Other", text('pump_other'));
-            drawRow("Light Poles", `Qty: ${text('poles_qty')}  |  Color: ${text('poles_color')}`);
-            drawRow("Vent Pipes", `Qty: ${text('vent_qty')}  |  Color: ${text('vent_color')}`);
-            drawRow("Canopy Lights", `Qty: ${text('lights_qty')}  |  LED: ${check('lights_led')}  |  Non-LED: ${check('lights_nonled')}`);
-            
-            y -= 10;
-            page.drawText("General Field Comments:", { x: 40, y, size: 11, font: await pdfDoc.embedFont('Helvetica-Bold') });
-            y -= 15;
-            page.drawText(text('site_comments'), { x: 40, y, size: 10, maxWidth: 530, lineHeight: 14 });
+        // Compile Images onto dedicated single sheets
+        const photoContainer = document.getElementById('photoInjectionContainer');
+        photoContainer.innerHTML = "";
 
-            // Photo Pages Extraction Sequence
-            for (let i = 0; i < photoStore.length; i++) {
-                page = pdfDoc.addPage([612, 792]);
-                const photo = photoStore[i];
-                
-                const rawBytes = Uint8Array.from(atob(photo.split(',')[1]), c => c.charCodeAt(0));
-                const imgEmbed = await pdfDoc.embedJpg(rawBytes);
+        photoStore.forEach(photo => {
+            const pageDiv = document.createElement('div');
+            pageDiv.className = "pdf-photo-wrapper";
+            pageDiv.innerHTML = `
+                <div class="pdf-photo-header">
+                    <span>${jobTitle.toUpperCase()} — EMPIRE SURVEY FORM</span>
+                    <span>Field Image Log Record</span>
+                </div>
+                <div class="pdf-img-box">
+                    <img src="${photo.src}">
+                    <div class="pdf-img-tag">${photo.category}</div>
+                    <div class="pdf-img-notes">${photo.notes}</div>
+                </div>
+            `;
+            photoContainer.appendChild(pageDiv);
+        });
 
-                page.drawText(`FIELD IMAGE LOG — ATTACHMENT #${i + 1}`, { x: 40, y: 740, size: 12, font: await pdfDoc.embedFont('Helvetica-Bold') });
-                page.drawText(`Category: ${photo.category}`, { x: 40, y: 720, size: 11 });
-                page.drawText(`Notes: ${photo.notes}`, { x: 40, y: 700, size: 10, maxWidth: 530 });
+        // Trigger safe, non-blocking hardware renderer
+        const target = document.getElementById('pdf-render-target');
+        target.style.display = 'block';
 
-                page.drawImage(imgEmbed, { x: 40, y: 230, width: 532, height: 440 });
-            }
+        const pdfOptions = {
+            margin:       0.2,
+            filename:     'Empire_SurveyForm_' + jobTitle.replace(/\s+/g, '_') + '.pdf',
+            image:        { type: 'jpeg', quality: 0.85 },
+            html2canvas:  { scale: 2, useCORS: true, scrollY: 0, logging: false },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
 
-            // Fire Mobile Native Document Pipeline Trigger
-            const finalBytes = await pdfDoc.save();
-            const blob = new Blob([finalBytes], { type: "application/pdf" });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `Empire_SurveyForm_${text('form_wo').replace(/\s+/g, '_') || 'DATA'}.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (err) {
-            alert("Error compiling master data layout: " + err.message);
-        } finally {
+        html2pdf().from(target).set(pdfOptions).save().then(() => {
+            target.style.display = 'none';
             btn.disabled = false;
             btn.innerText = "⚙ Compile & Save Clean Survey Form Package";
-        }
+        }).catch(err => {
+            alert("Renderer crash: " + err.message);
+            btn.disabled = false;
+            btn.innerText = "⚙ Compile & Save Clean Survey Form Package";
+        });
     }
 </script>
 
