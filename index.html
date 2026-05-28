@@ -6,15 +6,15 @@
     <title>Empire Canopy, Sign & Construction - Survey Portal</title>
     <style>
         /* ==========================================================================
-           EMPIRE CORPORATE DESIGN SYSTEM (High-Fidelity Match to image_da5d3a.png)
+           EMPIRE CORPORATE DESIGN SYSTEM
            ========================================================================== */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --empire-red: #ff0000;       /* Vibrant corporate red */
-            --empire-blue: #0f398a;      /* Clean deep brand blue */
-            --empire-dark: #000000;      /* Sharp black typography */
-            --bg-light: #f1f5f9;         /* Field-scannable slate background */
+            --empire-red: #ff0000;       
+            --empire-blue: #0f398a;      
+            --empire-dark: #000000;      
+            --bg-light: #f1f5f9;         
             --card-bg: #ffffff;
             --border-color: #cbd5e1;
             --text-main: #1e293b;
@@ -47,7 +47,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        /* High-Fidelity Header Layout */
+        /* Header Layout */
         .brand-header {
             display: flex;
             align-items: center;
@@ -57,18 +57,11 @@
             margin-bottom: 24px;
         }
 
-        .logo-graphic-container {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Pixel-perfect vector match of the exact image geometry */
         .logo-svg {
-    width: 100%;       /* Takes full width of its container */
-    max-width: 200px;  /* Adjust this number to make the logo larger or smaller */
-    height: auto;      /* Keeps the aspect ratio from breaking */
-}
+            width: 100%;
+            max-width: 160px;
+            height: auto;
+        }
 
         .logo-text-box {
             display: flex;
@@ -76,38 +69,33 @@
         }
 
         .logo-text-box h1 {
-            font-size: 2.2em;
+            font-size: 1.8em;
             font-weight: 800;
-            letter-spacing: 1.5px;
             margin: 0;
-            line-height: 0.95;
+            line-height: 1.1;
             color: var(--empire-dark);
-            font-family: 'Inter', sans-serif;
         }
 
         .logo-subtext-pill {
             background-color: var(--empire-blue);
             color: #ffffff;
-            font-size: 0.65em;
+            font-size: 0.75em;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 50px;
             margin-top: 6px;
             display: inline-block;
-            text-align: center;
             width: fit-content;
         }
 
-        /* Section Typography */
+        /* Layout & Inputs */
         .section-title {
             color: var(--empire-blue);
             font-size: 0.95em;
             font-weight: 800;
             margin: 28px 0 14px 0;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 6px;
         }
@@ -119,9 +107,12 @@
             margin-bottom: 14px;
         }
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
+        .input-group { display: flex; flex-direction: column; }
+        
+        /* Mobile adjustment for full-width inputs */
+        @media (max-width: 600px) {
+            .grid-row { grid-template-columns: 1fr; }
+            .input-group { grid-column: span 1 !important; }
         }
 
         label {
@@ -130,7 +121,6 @@
             margin-bottom: 6px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         input, select, textarea {
@@ -139,10 +129,7 @@
             background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            color: var(--text-main);
-            font-size: 16px; /* Prevents iOS auto-zoom styling bug */
-            transition: border-color 0.15s ease;
-            -webkit-appearance: none;
+            font-size: 16px; /* Prevents iOS auto-zoom */
         }
 
         input:focus, select:focus, textarea:focus {
@@ -151,6 +138,7 @@
             box-shadow: 0 0 0 3px rgba(15, 57, 138, 0.15);
         }
 
+        /* Checkboxes */
         .checkbox-row {
             display: flex;
             gap: 10px;
@@ -167,7 +155,6 @@
             background: #f8fafc;
             padding: 10px 12px;
             border-radius: 6px;
-            cursor: pointer;
             border: 1px solid #e2e8f0;
             flex-grow: 1;
         }
@@ -177,20 +164,11 @@
             height: 18px;
             margin: 0;
             accent-color: var(--empire-blue);
-            -webkit-appearance: checkbox;
         }
 
-        .inline-qty {
-            width: 55px;
-            padding: 4px;
-            margin-left: auto;
-            font-size: 14px;
-            text-align: center;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-        }
+        .inline-qty { width: 65px; text-align: center; margin-left: auto;}
 
-        /* Image Capture Workspace */
+        /* Photo Upload & Gallery */
         .photo-box {
             background: #f8fafc;
             border: 2px dashed var(--border-color);
@@ -207,11 +185,9 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.9em;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .live-gallery {
@@ -226,116 +202,47 @@
             border-radius: 6px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        .gallery-card img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .gallery-details {
-            padding: 6px;
-        }
-
-        .tag {
-            background: rgba(15, 57, 138, 0.08);
-            color: var(--empire-blue);
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.7em;
-            display: block;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .btn-submit { 
-            background: var(--empire-red); 
-            color: white; 
-            padding: 16px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: 1.05em;
-            width: 100%;
-            margin-top: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 6px rgba(255, 0, 0, 0.15);
-        }
+        .gallery-card img { width: 100%; height: 100px; object-fit: cover; display: block; }
+        .gallery-details { padding: 6px; }
+        .tag { background: rgba(15, 57, 138, 0.08); color: var(--empire-blue); padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 0.7em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        .btn-delete {
-            background: #fff5f5;
-            color: var(--empire-red);
-            padding: 5px;
-            font-size: 0.75em;
-            font-weight: 700;
-            border-radius: 4px;
-            border: 1px solid #fed7d7;
-            width: 100%;
-            margin-top: 6px;
-            cursor: pointer;
+        /* Buttons & Alerts */
+        .btn-submit { 
+            background: var(--empire-red); color: white; padding: 16px; border: none; border-radius: 6px; font-weight: 800; font-size: 1.05em; width: 100%; margin-top: 24px; cursor: pointer; text-transform: uppercase;
         }
-
-        #status-alert {
-            display: none;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            font-weight: 700;
-            font-size: 0.85em;
-            text-align: center;
-        }
+        .btn-delete { background: #fff5f5; color: var(--empire-red); padding: 5px; font-size: 0.75em; font-weight: 700; border-radius: 4px; border: 1px solid #fed7d7; width: 100%; margin-top: 6px; cursor: pointer; }
+        
+        #status-alert { display: none; padding: 12px; border-radius: 6px; margin-bottom: 16px; font-weight: 700; font-size: 0.85em; text-align: center; }
 
         /* ==========================================================================
-           CROSS-PLATFORM ENGINE FOR AIRPRINT & PDF EXPORT
+           PRINT ENGINE (Hides Web Form, Shows Professional PDF Report)
            ========================================================================== */
-        #print-view { display: none; }
-
         @media print {
-            body, #main-app, .app-container, .card {
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-                border: none !important;
-            }
-            #main-app { display: none !important; }
-            #print-view {
-                display: block !important;
-                background: white;
-                color: black;
-                font-family: Arial, sans-serif;
-                width: 100%;
-            }
-            .p-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; }
-            .p-table td { border: 1px solid #000000; padding: 7px 9px; font-size: 11px; vertical-align: middle; }
-            .p-label { background: #f1f5f9 !important; font-weight: bold; width: 24%; text-transform: uppercase; font-size: 10px; color: #000000; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            /* 1. Hide the Web App */
+            body > *:not(#print-view) { display: none !important; }
             
-            .p-corporate-logo-cell {
-                padding: 16px !important;
-                background: #000000 !important;
-                color: white !important;
-                text-align: center;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .p-corp-title { font-family: 'Arial Black', sans-serif; font-size: 26px; letter-spacing: 1px; font-weight: 900; margin: 0; }
-            .p-corp-title span { color: #ff0000; }
-            .p-corp-sub { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: bold; color: #cbd5e1; }
-
-            .p-photo-block { page-break-before: always; padding-top: 15px; text-align: center; page-break-inside: avoid; }
-            .p-photo-header { display: flex; justify-content: space-between; font-size: 10px; font-weight: bold; border-bottom: 2px solid black; padding-bottom: 4px; text-transform: uppercase; margin-bottom: 12px; }
-            .p-photo-block img { max-width: 100%; max-height: 480px; object-fit: contain; border: 1px solid black; margin-top: 4px; display: block; margin-left: auto; margin-right: auto; }
+            /* 2. Reveal Print Container */
+            #print-view { display: block !important; width: 100%; color: black; font-family: Arial, sans-serif; }
+            
+            /* 3. Table Formatting */
+            .p-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; border: 2px solid #000; }
+            .p-table td { border: 1px solid #000; padding: 8px; font-size: 12px; vertical-align: top; }
+            .p-label { background: #f1f5f9 !important; font-weight: bold; width: 25%; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            /* Header inside Print */
+            .p-header-cell { background: #000 !important; color: #fff !important; padding: 15px !important; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .p-header-cell h2 { margin: 0; font-family: 'Arial Black', sans-serif; letter-spacing: 1px; }
+            .p-header-cell span { color: red; }
+            
+            /* 4. Photo Pagination (Forces New Page for each Category) */
+            .category-section { page-break-before: always; padding-top: 15px; }
+            .category-title { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 15px; font-size: 16px; font-weight: bold; text-transform: uppercase;}
+            .photo-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; }
+            .p-photo-card { width: 48%; page-break-inside: avoid; margin-bottom: 15px; }
+            .p-photo-card img { width: 100%; max-height: 400px; object-fit: contain; border: 1px solid #000; }
+            .p-photo-card p { font-size: 11px; font-weight: bold; margin-top: 5px; }
         }
     </style>
 </head>
@@ -343,16 +250,12 @@
 
 <div class="app-container" id="main-app">
     <div class="card">
-</div>
-</div>
-   <div class="brand-header">
-    <img src="empire - logo.png" alt="Empire Logo" class="logo-svg">
-
-    <div class="logo-text-box">
-        <h1 style="margin: 0;">Empire Canopy Sign & Construction</h1>
-        <div style="font-size: 1.2rem; color: #0f398a; font-weight: bold;">Field Survey Form</div>
-    </div>
-   </div>
+        <div class="brand-header">
+            <img src="empire - logo.png" alt="Empire Logo" class="logo-svg" onerror="this.style.display='none'">
+            <div class="logo-text-box">
+                <h1>Empire Canopy Sign &amp; Construction</h1>
+                <div class="logo-subtext-pill">Field Survey Form</div>
+            </div>
         </div>
 
         <div id="status-alert"></div>
@@ -388,7 +291,7 @@
             </div>
             <div class="input-group">
                 <label>Columns Quantity</label>
-                <input type="text" id="col_qty" placeholder="Total Count">
+                <input type="number" id="col_qty" placeholder="Total Count" inputmode="numeric">
             </div>
             <div class="input-group">
                 <label>Column Base Profiles</label>
@@ -409,7 +312,7 @@
             </div>
             <div class="input-group">
                 <label>Canopy Bollards Quantity</label>
-                <input type="text" id="cb_qty" placeholder="Count">
+                <input type="number" id="cb_qty" class="bollard-field" placeholder="Count" inputmode="numeric">
             </div>
         </div>
 
@@ -423,7 +326,7 @@
             </div>
             <div class="input-group">
                 <label>Store Bollards Quantity</label>
-                <input type="text" id="sb_qty" placeholder="Count">
+                <input type="number" id="sb_qty" class="bollard-field" placeholder="Count" inputmode="numeric">
             </div>
         </div>
 
@@ -437,7 +340,15 @@
             </div>
             <div class="input-group">
                 <label>Other Bollards Quantity</label>
-                <input type="text" id="ob_qty" placeholder="Count">
+                <input type="number" id="ob_qty" class="bollard-field" placeholder="Count" inputmode="numeric">
+            </div>
+        </div>
+
+        <div class="grid-row">
+            <div class="input-group" style="grid-column: span 3 / span 3;">
+                <div style="background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px dashed var(--empire-blue); font-size: 0.85em; font-weight: bold; color: var(--empire-blue); text-align: center;">
+                    📊 Total Bollard Covers Required = <span id="total_bollards_badge">0</span>
+                </div>
             </div>
         </div>
 
@@ -467,18 +378,18 @@
         <div class="grid-row">
             <div class="input-group">
                 <label>Pump Islands Quantity</label>
-                <input type="text" id="pump_islands_qty" placeholder="Total Islands">
+                <input type="number" id="pump_islands_qty" placeholder="Total Islands" inputmode="numeric">
             </div>
             <div class="input-group" style="grid-column: span 2 / span 2;">
                 <label>Dispenser Product Configurations</label>
                 <div class="checkbox-row">
-                    <span class="checkbox-item">
+                    <span class="checkbox-item" style="flex-wrap: wrap;">
                         <input type="checkbox" id="pump_31"> 3+1 Blended
-                        <input type="text" id="pump_31_qty" class="inline-qty" placeholder="Qty">
+                        <input type="number" id="pump_31_qty" class="inline-qty" placeholder="Qty" inputmode="numeric">
                     </span>
-                    <span class="checkbox-item">
+                    <span class="checkbox-item" style="flex-wrap: wrap;">
                         <input type="checkbox" id="pump_30"> 3+0 Standard
-                        <input type="text" id="pump_30_qty" class="inline-qty" placeholder="Qty">
+                        <input type="number" id="pump_30_qty" class="inline-qty" placeholder="Qty" inputmode="numeric">
                     </span>
                 </div>
             </div>
@@ -493,7 +404,7 @@
         <div class="grid-row">
             <div class="input-group">
                 <label>Illumination Light Poles Qty</label>
-                <input type="text" id="poles_qty" placeholder="Count">
+                <input type="number" id="poles_qty" placeholder="Count" inputmode="numeric">
             </div>
             <div class="input-group">
                 <label>Light Poles Factory Color</label>
@@ -503,7 +414,7 @@
         <div class="grid-row">
             <div class="input-group">
                 <label>Vent Stacks / Pipes Qty</label>
-                <input type="text" id="vent_qty" placeholder="Count">
+                <input type="number" id="vent_qty" placeholder="Count" inputmode="numeric">
             </div>
             <div class="input-group">
                 <label>Vent Stacks Paint Color</label>
@@ -514,232 +425,16 @@
         <div class="grid-row">
             <div class="input-group">
                 <label>Under-Canopy Lighting Fixtures Qty</label>
-                <input type="text" id="lights_qty" placeholder="Total Fixtures">
+                <input type="number" id="lights_qty" placeholder="Total Fixtures" inputmode="numeric">
             </div>
             <div class="input-group">
                 <label>Luminaire Technology Array</label>
                 <div class="checkbox-row">
                     <label class="checkbox-item"><input type="checkbox" id="lights_led"> Solid-State LED</label>
-                    <label class="checkbox-item"><input type="checkbox" id="lights_nonled"> Traditional HID/HID</label>
+                    <label class="checkbox-item"><input type="checkbox" id="lights_nonled"> Traditional HID</label>
                 </div>
             </div>
         </div>
 
         <div class="grid-row">
-            <div class="input-group" style="grid-column: span 3 / span 3;">
-                <label>Field Observations & Structural Comments</label>
-                <textarea id="site_comments" rows="3" placeholder="Log any distinct architectural, clearance or structural notes..."></textarea>
-            </div>
-        </div>
-
-        <div class="section-title">Required Field Photo Ingestion</div>
-        <div class="grid-row">
-            <div class="input-group">
-                <label>Target Placement Label</label>
-                <select id="photoCategory">
-                    <option value="All Four Sides of Canopy">All Four Sides of Canopy</option>
-                    <option value="Both Sides of All Pumps">Both Sides of All Pumps</option>
-                    <option value="All Four Sides of Building/Car Wash">All Four Sides of Building/Car Wash</option>
-                    <option value="Both Sides of MID">Both Sides of MID</option>
-                    <option value="Canopy Deck From Under Canopy">Canopy Deck From Under Canopy</option>
-                    <option value="A Few Overall Site Photos">A Few Overall Site Photos</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Orientation Direction / Elevation Note</label>
-                <input type="text" id="photoNotes" placeholder="e.g. Looking North-East">
-            </div>
-        </div>
-
-        <div class="photo-box">
-            <label class="file-trigger">
-                <span>📸 Camera Capture / File Asset</span>
-                <input type="file" id="fileSelector" accept="image/*" multiple style="display:none;" onchange="optimizeAndBufferImages(event)">
-            </label>
-        </div>
-
-        <div class="live-gallery" id="previewGallery"></div>
-
-        <button type="button" id="submitBtn" class="btn-submit" onclick="compileAndTriggerPrintSystem()">
-            Compile & Generate Survey Package
-        </button>
-</div>
-</div>
-
-<div id="print-view"></div>
-
-<script>
-    document.getElementById('form_date').valueAsDate = new Date();
-    let siteImageBuffer = [];
-
-    function postFeedbackMessage(text, nature) {
-        const component = document.getElementById('status-alert');
-        component.innerText = text;
-        component.style.display = 'block';
-        if (nature === 'success') {
-            component.style.background = '#f0fdf4'; component.style.color = '#166534'; component.style.border = '1px solid #bbf7d0';
-        } else if (nature === 'process') {
-            component.style.background = '#eff6ff'; component.style.color = '#1e40af'; component.style.border = '1px solid #bfdbfe';
-        } else {
-            component.style.background = '#fef2f2'; component.style.color = '#991b1b'; component.style.border = '1px solid #fecaca';
-        }
-    }
-
-    function optimizeAndBufferImages(e) {
-        const assets = e.target.files;
-        if (!assets.length) return;
-
-        postFeedbackMessage("Processing and stabilizing image quality strings...", "process");
-
-        const structuralCategory = document.getElementById('photoCategory').value;
-        const directionalNotes = document.getElementById('photoNotes').value || "Survey field record.";
-        let completePipelineTracker = 0;
-
-        for (let idx = 0; idx < assets.length; idx++) {
-            const fileRef = assets[idx];
-            const pipelineReader = new FileReader();
-            
-            pipelineReader.readAsDataURL(fileRef);
-            pipelineReader.onload = function(uploadEvent) {
-                const targetImageElement = new Image();
-                targetImageElement.src = uploadEvent.target.result;
-                
-                targetImageElement.onload = function() {
-                    const canvasMatrix = document.createElement('canvas');
-                    const dimensionalBoundary = 1000; /* Expanded width boundary for crystal clear blueprint readability */
-                    let structuralWidth = targetImageElement.width;
-                    let structuralHeight = targetImageElement.height;
-
-                    if (structuralWidth > structuralHeight) {
-                        if (structuralWidth > dimensionalBoundary) { 
-                            structuralHeight = Math.round((structuralHeight * dimensionalBoundary) / structuralWidth); 
-                            structuralWidth = dimensionalBoundary; 
-                        }
-                    } else {
-                        if (structuralHeight > dimensionalBoundary) { 
-                            structuralWidth = Math.round((structuralWidth * dimensionalBoundary) / structuralHeight); 
-                            structuralHeight = dimensionalBoundary; 
-                        }
-                    }
-
-                    canvasMatrix.width = structuralWidth; 
-                    canvasMatrix.height = structuralHeight;
-                    const context2D = canvasMatrix.getContext('2d');
-                    context2D.drawImage(targetImageElement, 0, 0, structuralWidth, structuralHeight);
-                    
-                    // Maintained at 0.78 quality coefficient to avoid blowing up memory boundaries on mobile web views
-                    const optimizedBase64Stream = canvasMatrix.toDataURL('image/jpeg', 0.78);
-
-                    siteImageBuffer.push({
-                        idKey: Date.now() + Math.random().toString(36).substr(2, 5),
-                        categoryLabel: structuralCategory,
-                        notesLabel: directionalNotes,
-                        dataStream: optimizedBase64Stream
-                    });
-
-                    completePipelineTracker++;
-                    if (completePipelineTracker === assets.length) {
-                        postFeedbackMessage(`Successfully added ${assets.length} images to packet.`, "success");
-                        refreshVisualGallery();
-                        document.getElementById('photoNotes').value = "";
-                        document.getElementById('fileSelector').value = "";
-                    }
-                };
-            };
-        }
-    }
-
-    function removeTargetAsset(targetUID) {
-        siteImageBuffer = siteImageBuffer.filter(element => element.idKey !== targetUID);
-        refreshVisualGallery();
-        postFeedbackMessage("Asset successfully deleted from survey bundle.", "success");
-    }
-
-    function refreshVisualGallery() {
-        const domTarget = document.getElementById('previewGallery');
-        domTarget.innerHTML = "";
-        siteImageBuffer.forEach(assetItem => {
-            const nodeWrapper = document.createElement('div');
-            nodeWrapper.className = "gallery-card";
-            nodeWrapper.innerHTML = `
-                <img src="${assetItem.dataStream}">
-                <div class="gallery-details">
-                    <span class="tag">${assetItem.categoryLabel}</span>
-                    <button type="button" class="btn-delete" onclick="removeTargetAsset('${assetItem.idKey}')">Delete</button>
-                </div>
-            `;
-            domTarget.appendChild(nodeWrapper);
-        });
-    }
-
-   function compileAndTriggerPrintSystem() {
-    const printView = document.getElementById('print-view');
-    
-    // 1. Clear previous content
-    printView.innerHTML = ''; 
-
-    // 2. Build your table HTML (use the code you just shared)
-    let reportHTML = `
-        <div class="print-page">
-            <table class="p-table">
-                </table>
-        </div>
-    `;
-
-    // 3. Group and Append Photos (Crucial for clean organization)
-    const grouped = siteImageBuffer.reduce((acc, img) => {
-        (acc[img.categoryLabel] = acc[img.categoryLabel] || []).push(img);
-        return acc;
-    }, {});
-
-    Object.keys(grouped).forEach(cat => {
-        reportHTML += `<div class="category-section"><h3>${cat}</h3>`;
-        grouped[cat].forEach(photo => {
-            reportHTML += `
-                <div class="p-photo-card">
-                    <img src="${photo.dataStream}" style="width:100%; max-width:400px;">
-                    <p>Note: ${photo.notesLabel}</p>
-                </div>`;
-        });
-        reportHTML += `</div>`;
-    });
-
-    // 4. Inject into the DOM
-    printView.innerHTML = reportHTML;
-
-    // 5. Trigger Print
-    window.print();
-    
-    // 6. Optional: Re-enable button after a short delay
-    setTimeout(() => { document.getElementById('submitBtn').disabled = false; }, 2000);
-}
-
-            siteImageBuffer.forEach((bufferedImage, placementIndex) => {
-                reportingHTMLPayload += `
-                    <div class="p-photo-block">
-                        <div class="p-photo-header">
-                            <span>SURVEY FILE: ${cleanWorkOrderHeader} &mdash; EMPIRE</span>
-                            <span>EVIDENCE RECORD ASSET #${placementIndex + 1}</span>
-                        </div>
-                        <img src="${bufferedImage.dataStream}">
-                        <div style="font-size:11px; font-weight:bold; text-align:left; margin-top:6px; text-transform:uppercase; color:#ff0000;">SITE CATEGORY: ${bufferedImage.categoryLabel}</div>
-                        <div style="font-size:10px; text-align:left; color:#475569; margin-top:2px;">OBSERVATION DETAILS: ${bufferedImage.notesLabel}</div>
-                    </div>
-                `;
-            });
-
-            const renderPortal = document.getElementById('print-view');
-            renderPortal.innerHTML = reportingHTMLPayload;
-
-            window.print();
-
-        } catch (runtimeFault) {
-            alert("Survey packet compilation error: " + runtimeFault.message);
-        } finally {
-            submissionControl.disabled = false;
-        }
-    }
-</script>
-
-</body>
-</html>
+            <div class="input-group" style="grid-
