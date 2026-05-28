@@ -1,170 +1,184 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Empire Canopy, Sign & Construction - Survey Portal</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        :root {
-            --empire-red: #ff0000;
-            --empire-blue: #0f398a;
-            --empire-dark: #000000;
-            --bg-light: #f1f5f9;
-            --card-bg: #ffffff;
-            --border-color: #cbd5e1;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-        }
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 12px; }
-        .app-container { max-width: 800px; margin: 0 auto; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; }
-        .brand-header { display: flex; align-items: center; gap: 16px; border-bottom: 4px solid var(--empire-blue); padding-bottom: 16px; margin-bottom: 24px; }
-        .logo-svg { width: 75px; height: 65px; }
-        .logo-text-box h1 { font-size: 2.2em; font-weight: 800; margin: 0; color: var(--empire-dark); }
-        .logo-subtext-pill { background-color: var(--empire-blue); color: #ffffff; font-size: 0.65em; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 50px; }
-        .section-title { color: var(--empire-blue); font-size: 0.95em; font-weight: 800; margin: 28px 0 14px 0; text-transform: uppercase; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; }
-        .grid-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 14px; }
-        .input-group { display: flex; flex-direction: column; }
-        label { font-size: 0.75em; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px; }
-        .checkbox-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .checkbox-item { display: flex; align-items: center; gap: 6px; font-size: 0.85em; font-weight: 600; background: #f8fafc; padding: 10px 12px; border-radius: 6px; border: 1px solid #e2e8f0; }
-        .inline-qty { width: 55px; padding: 4px; margin-left: auto; text-align: center; border-radius: 4px; border: 1px solid var(--border-color); }
-        .photo-box { background: #f8fafc; border: 2px dashed var(--border-color); border-radius: 8px; padding: 24px; text-align: center; margin: 16px 0; }
-        .file-trigger { background: var(--empire-blue); color: white; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 700; }
-        .live-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 16px; }
-        .gallery-card { background: white; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; }
-        .gallery-card img { width: 100%; height: 100px; object-fit: cover; }
-        .btn-submit { background: var(--empire-red); color: white; padding: 16px; border: none; border-radius: 6px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 24px; }
-        .btn-delete { background: #fff5f5; color: var(--empire-red); padding: 5px; border: 1px solid #fed7d7; width: 100%; }
-        #print-view { display: none; }
-        @media print {
-            #main-app { display: none; }
-            #print-view { display: block; font-family: Arial, sans-serif; }
-            .p-table { width: 100%; border-collapse: collapse; }
-            .p-table td { border: 1px solid #000; padding: 8px; }
-            .p-label { background: #eee !important; font-weight: bold; -webkit-print-color-adjust: exact; }
-            .p-photo-block { page-break-before: always; text-align: center; }
-            .p-photo-block img { max-width: 100%; height: auto; border: 1px solid #000; }
-        }
-    </style>
-</head>
-<body>
-
-<div class="app-container" id="main-app">
-    <div class="card">
-        <div class="brand-header">
-            <svg class="logo-svg" viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 10,105 A 60,60 0 0,1 130,105 L 108,105 A 38,38 0 0,0 32,105 Z" fill="#ff0000"/>
-                <path d="M 43,105 L 67,105 L 67,36 L 43,47 Z" fill="#0f398a"/>
-                <path d="M 73,105 L 97,105 L 97,47 L 73,36 Z" fill="#0f398a"/>
-            </svg>
-            <div class="logo-text-box">
-                <h1>EMPIRE</h1>
-                <div><span class="logo-subtext-pill">Canopy • Sign • Construction</span></div>
-            </div>
-        </div>
-        
-        <div class="grid-row">
-            <div class="input-group">
-                <label>Work Order / Facility</label>
-                <input type="text" id="form_wo" placeholder="e.g. GET N GO">
-            </div>
-            <div class="input-group">
-                <label>Survey Date</label>
-                <input type="date" id="form_date">
-            </div>
-        </div>
-        <div class="input-group">
-            <label>Job Site Physical Address</label>
-            <input type="text" id="form_address" placeholder="Full Address">
-        </div>
-
-        <div class="section-title">Site Details</div>
-        <div class="grid-row">
-            <div class="input-group">
-                <label>Columns Size</label>
-                <input type="text" id="col_size" placeholder="e.g. 12x12">
-            </div>
-            <div class="input-group">
-                <label>Columns Qty</label>
-                <input type="text" id="col_qty" placeholder="Count">
-            </div>
-        </div>
-
-        <div class="photo-box">
-            <label class="file-trigger">
-                <span>📸 Add Photos</span>
-                <input type="file" id="fileSelector" accept="image/*" multiple style="display:none;" onchange="optimizeAndBufferImages(event)">
-            </label>
-        </div>
-        <div class="live-gallery" id="previewGallery"></div>
-
-        <button type="button" class="btn-submit" onclick="compileAndTriggerPrintSystem()">Generate Survey Package</button>
-    </div>
-</div>
-
-<div id="print-view"></div>
-
 <script>
     document.getElementById('form_date').valueAsDate = new Date();
     let siteImageBuffer = [];
 
-    function optimizeAndBufferImages(e) {
-        const assets = e.target.files;
-        for (let file of assets) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                siteImageBuffer.push({
-                    id: Date.now() + Math.random(),
-                    data: event.target.result
-                });
-                refreshVisualGallery();
-            };
-            reader.readAsDataURL(file);
+    function postFeedbackMessage(text, nature) {
+        const component = document.getElementById('status-alert');
+        component.innerText = text;
+        component.style.display = 'block';
+        if (nature === 'success') {
+            component.style.background = '#f0fdf4'; component.style.color = '#166534'; component.style.border = '1px solid #bbf7d0';
+        } else if (nature === 'process') {
+            component.style.background = '#eff6ff'; component.style.color = '#1e40af'; component.style.border = '1px solid #bfdbfe';
+        } else {
+            component.style.background = '#fef2f2'; component.style.color = '#991b1b'; component.style.border = '1px solid #fecaca';
         }
     }
 
-    function refreshVisualGallery() {
-        const dom = document.getElementById('previewGallery');
-        dom.innerHTML = "";
-        siteImageBuffer.forEach(item => {
-            const div = document.createElement('div');
-            div.className = "gallery-card";
-            div.innerHTML = `<img src="${item.data}"><button class="btn-delete" onclick="removeItem(${item.id})">Remove</button>`;
-            dom.appendChild(div);
-        });
+    function optimizeAndBufferImages(e) {
+        const assets = e.target.files;
+        if (!assets.length) return;
+
+        postFeedbackMessage("Processing images...", "process");
+
+        const structuralCategory = document.getElementById('photoCategory').value;
+        const directionalNotes = document.getElementById('photoNotes').value || "Survey field record.";
+        let completePipelineTracker = 0;
+
+        for (let idx = 0; idx < assets.length; idx++) {
+            const fileRef = assets[idx];
+            const pipelineReader = new FileReader();
+            
+            pipelineReader.readAsDataURL(fileRef);
+            pipelineReader.onload = function(uploadEvent) {
+                const targetImageElement = new Image();
+                targetImageElement.src = uploadEvent.target.result;
+                
+                targetImageElement.onload = function() {
+                    const canvasMatrix = document.createElement('canvas');
+                    const dimensionalBoundary = 1000;
+                    let structuralWidth = targetImageElement.width;
+                    let structuralHeight = targetImageElement.height;
+
+                    if (structuralWidth > structuralHeight) {
+                        if (structuralWidth > dimensionalBoundary) { 
+                            structuralHeight = Math.round((structuralHeight * dimensionalBoundary) / structuralWidth); 
+                            structuralWidth = dimensionalBoundary; 
+                        }
+                    } else {
+                        if (structuralHeight > dimensionalBoundary) { 
+                            structuralWidth = Math.round((structuralWidth * dimensionalBoundary) / structuralHeight); 
+                            structuralHeight = dimensionalBoundary; 
+                        }
+                    }
+
+                    canvasMatrix.width = structuralWidth; 
+                    canvasMatrix.height = structuralHeight;
+                    const context2D = canvasMatrix.getContext('2d');
+                    context2D.drawImage(targetImageElement, 0, 0, structuralWidth, structuralHeight);
+                    
+                    const optimizedBase64Stream = canvasMatrix.toDataURL('image/jpeg', 0.78);
+
+                    siteImageBuffer.push({
+                        idKey: Date.now() + Math.random().toString(36).substr(2, 5),
+                        categoryLabel: structuralCategory,
+                        notesLabel: directionalNotes,
+                        dataStream: optimizedBase64Stream
+                    });
+
+                    completePipelineTracker++;
+                    if (completePipelineTracker === assets.length) {
+                        postFeedbackMessage(`Added ${assets.length} images.`, "success");
+                        refreshVisualGallery();
+                        document.getElementById('photoNotes').value = "";
+                        document.getElementById('fileSelector').value = "";
+                    }
+                };
+            };
+        }
     }
 
-    function removeItem(id) {
-        siteImageBuffer = siteImageBuffer.filter(i => i.id !== id);
+    function removeTargetAsset(targetUID) {
+        siteImageBuffer = siteImageBuffer.filter(element => element.idKey !== targetUID);
         refreshVisualGallery();
     }
 
-    function compileAndTriggerPrintSystem() {
-        const wo = document.getElementById('form_wo').value;
-        const addr = document.getElementById('form_address').value;
-        
-        let html = `
-            <h3>Survey Report: ${wo}</h3>
-            <p>Location: ${addr}</p>
-            <table class="p-table">
-                <tr><td class="p-label">Column Size</td><td>${document.getElementById('col_size').value}</td></tr>
-                <tr><td class="p-label">Column Qty</td><td>${document.getElementById('col_qty').value}</td></tr>
-            </table>
-            <h4>Attached Photos</h4>
-        `;
-
-        siteImageBuffer.forEach(img => {
-            html += `<div class="p-photo-block"><img src="${img.data}"></div>`;
+    function refreshVisualGallery() {
+        const domTarget = document.getElementById('previewGallery');
+        domTarget.innerHTML = "";
+        siteImageBuffer.forEach(assetItem => {
+            const nodeWrapper = document.createElement('div');
+            nodeWrapper.className = "gallery-card";
+            nodeWrapper.innerHTML = `
+                <img src="${assetItem.dataStream}">
+                <div class="gallery-details">
+                    <span class="tag">${assetItem.categoryLabel}</span>
+                    <button type="button" class="btn-delete" onclick="removeTargetAsset('${assetItem.idKey}')">Delete</button>
+                </div>
+            `;
+            domTarget.appendChild(nodeWrapper);
         });
+    }
 
-        document.getElementById('print-view').innerHTML = html;
-        window.print();
+    function compileAndTriggerPrintSystem() {
+        const submissionControl = document.getElementById('submitBtn');
+        submissionControl.disabled = true;
+
+        try {
+            const extractInputString = (elementID) => document.getElementById(elementID).value || "---";
+            const extractCheckboxState = (elementID) => document.getElementById(elementID).checked ? "[ X ]" : "[   ]";
+            const cleanWorkOrderHeader = extractInputString('form_wo').toUpperCase();
+
+            let reportingHTMLPayload = `
+                <div class="print-page">
+                    <table class="p-table">
+                        <tr>
+                            <td colspan="4" rowspan="3" class="p-corporate-logo-cell">
+                                <div class="p-corp-title">EMPIRE<span> CO.</span></div>
+                                <div class="p-corp-sub">Field Engineering Survey Package</div>
+                            </td>
+                            <td class="p-label">SURVEY DATE</td>
+                            <td class="p-label">SURVEYOR</td>
+                        </tr>
+                        <tr>
+                            <td>${extractInputString('form_date')}</td>
+                            <td style="font-weight:bold;">${extractInputString('form_surveyor').toUpperCase()}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="p-label">Physical Job Site Location</td>
+                        </tr>
+                        <tr>
+                            <td class="p-label">WORK ORDER ID / NAME</td>
+                            <td colspan="3" style="font-weight:bold; font-size:13px; color:#ff0000;">${cleanWorkOrderHeader}</td>
+                            <td colspan="2" rowspan="2" style="vertical-align:top; font-weight:bold;">${extractInputString('form_address').toUpperCase()}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="height:6px;"></td>
+                        </tr>
+                        <tr>
+                            <td class="p-label">Column Configuration</td>
+                            <td colspan="5">
+                                DIMENSIONS: <strong>${extractInputString('col_size')}</strong> | QTY: <strong>${extractInputString('col_qty')}</strong> | ROUND: <strong>${extractCheckboxState('col_round')}</strong> | SQUARE: <strong>${extractCheckboxState('col_square')}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-label">Canopy/Store Bollards</td>
+                            <td colspan="5">
+                                CANOPY QTY: <strong>${extractInputString('cb_qty')}</strong> | STORE QTY: <strong>${extractInputString('sb_qty')}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-label">Lighting / Vents</td>
+                            <td colspan="5">
+                                LIGHTS QTY: <strong>${extractInputString('lights_qty')}</strong> | VENTS QTY: <strong>${extractInputString('vent_qty')}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-label">Field Notes</td>
+                            <td colspan="5">${extractInputString('site_comments')}</td>
+                        </tr>
+                    </table>
+            `;
+
+            siteImageBuffer.forEach(item => {
+                reportingHTMLPayload += `
+                <div class="p-photo-block">
+                    <div class="p-photo-header">
+                        <span>${item.categoryLabel}</span>
+                        <span>${item.notesLabel}</span>
+                    </div>
+                    <img src="${item.dataStream}">
+                </div>`;
+            });
+
+            reportingHTMLPayload += `</div>`;
+
+            document.getElementById('print-view').innerHTML = reportingHTMLPayload;
+            window.print();
+            submissionControl.disabled = false;
+        } catch (err) {
+            alert("Error compiling report: " + err.message);
+            submissionControl.disabled = false;
+        }
     }
 </script>
-
-</body>
-</html>
